@@ -6,7 +6,10 @@ from opendbc.can.parser import CANParser
 from selfdrive.car.interfaces import RadarInterfaceBase
 from selfdrive.car.hyundai.values import DBC
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 def get_radar_can_parser(CP):
   signals = [
     # sig_name, sig_address, default
@@ -21,15 +24,28 @@ def get_radar_can_parser(CP):
 
 class RadarInterface(RadarInterfaceBase):
   def __init__(self, CP):
+<<<<<<< HEAD
     super().__init__(CP)
+=======
+    # radar
+    self.pts = {}
+    self.delay = 0  # Delay of radar
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
     self.rcp = get_radar_can_parser(CP)
     self.updated_messages = set()
     self.trigger_msg = 0x420
     self.track_id = 0
+<<<<<<< HEAD
     self.radar_off_can = CP.sccBus == -1
 
   def update(self, can_strings):
     if self.radar_off_can:
+=======
+    self.no_radar = CP.sccBus == -1
+
+  def update(self, can_strings):
+    if self.no_radar:
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
       if 'NO_RADAR_SLEEP' not in os.environ:
         time.sleep(0.05)  # radard runs on RI updates
 
@@ -41,11 +57,19 @@ class RadarInterface(RadarInterfaceBase):
     if self.trigger_msg not in self.updated_messages:
       return None
 
+<<<<<<< HEAD
     rr = self._update(self.updated_messages)
+=======
+    rr =  self._update(self.updated_messages)
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
     self.updated_messages.clear()
 
     return rr
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
   def _update(self, updated_messages):
     ret = car.RadarData.new_message()
     cpt = self.rcp.vl
@@ -69,4 +93,8 @@ class RadarInterface(RadarInterfaceBase):
         self.pts[ii].measured = True
 
     ret.points = list(self.pts.values())
+<<<<<<< HEAD
     return ret
+=======
+    return ret
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99

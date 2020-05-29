@@ -1733,8 +1733,11 @@ static void parse_autofocus(CameraState *s, uint8_t *d) {
   for (int i = 0; i < NUM_FOCUS; i++) {
     int doff = i*5+5;
     s->confidence[i] = d[doff];
+<<<<<<< HEAD:selfdrive/camerad/cameras/camera_qcom.cc
     // this should just be a 10-bit signed int instead of 11
     // TODO: write it in a nicer way
+=======
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99:selfdrive/camerad/cameras/camera_qcom.c
     int16_t focus_t = (d[doff+1] << 3) | (d[doff+2] >> 5);
     if (focus_t >= 1024) focus_t = -(2048-focus_t);
     s->focus[i] = focus_t;

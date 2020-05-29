@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <assert.h>
+#include <time.h>
 #include <sys/mman.h>
 #include <sys/resource.h>
 #include <capnp/serialize.h>
@@ -15,6 +16,14 @@
 #include "common/visionimg.h"
 #include "common/params.h"
 
+<<<<<<< HEAD
+=======
+#include "ui.hpp"
+#include "sound.hpp"
+#include "dashcam.h"
+
+
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 static int last_brightness = -1;
 static void set_brightness(UIState *s, int brightness) {
   if (last_brightness != brightness && (s->awake || brightness == 0)) {
@@ -222,11 +231,18 @@ static void ui_init(UIState *s) {
   s->livecalibration_sock = SubSocket::create(s->ctx, "liveCalibration");
   s->radarstate_sock = SubSocket::create(s->ctx, "radarState");
   s->thermal_sock = SubSocket::create(s->ctx, "thermal");
+<<<<<<< HEAD
   s->health_sock = SubSocket::create(s->ctx, "health");
   s->ubloxgnss_sock = SubSocket::create(s->ctx, "ubloxGnss");
   s->driverstate_sock = SubSocket::create(s->ctx, "driverState");
   s->dmonitoring_sock = SubSocket::create(s->ctx, "dMonitoringState");
   s->offroad_sock = PubSocket::create(s->ctx, "offroadLayout");
+=======
+  s->carstate_sock = SubSocket::create(s->ctx, "carState");
+  s->gpslocation_sock = SubSocket::create(s->ctx, "gpsLocation");
+  s->gpslocationexternal_sock = SubSocket::create(s->ctx, "gpsLocationExternal");
+  s->livempc_sock = SubSocket::create(s->ctx, "liveMpc");
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 
   assert(s->model_sock != NULL);
   assert(s->controlsstate_sock != NULL);
@@ -234,11 +250,18 @@ static void ui_init(UIState *s) {
   assert(s->livecalibration_sock != NULL);
   assert(s->radarstate_sock != NULL);
   assert(s->thermal_sock != NULL);
+<<<<<<< HEAD
   assert(s->health_sock != NULL);
   assert(s->ubloxgnss_sock != NULL);
   assert(s->driverstate_sock != NULL);
   assert(s->dmonitoring_sock != NULL);
   assert(s->offroad_sock != NULL);
+=======
+  assert(s->carstate_sock != NULL);
+  assert(s->gpslocation_sock != NULL);
+  assert(s->gpslocationexternal_sock != NULL);
+  assert(s->livempc_sock != NULL);
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 
   s->poller = Poller::create({
                               s->model_sock,
@@ -246,12 +269,21 @@ static void ui_init(UIState *s) {
                               s->uilayout_sock,
                               s->livecalibration_sock,
                               s->radarstate_sock,
+<<<<<<< HEAD
                               s->thermal_sock,
                               s->health_sock,
                               s->ubloxgnss_sock,
                               s->driverstate_sock,
                               s->dmonitoring_sock
+=======
+                              s->carstate_sock,
+                              s->livempc_sock,
+                              s->gpslocation_sock,
+                              s->gpslocationexternal_sock,
+                              s->thermal_sock
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
                              });
+
 
 #ifdef SHOW_SPEEDLIMIT
   s->map_data_sock = SubSocket::create(s->ctx, "liveMapData");
@@ -299,6 +331,7 @@ static void ui_init_vision(UIState *s, const VisionStreamBufs back_bufs,
       .front_box_height = ui_info.front_box_height,
       .world_objects_visible = false,  // Invisible until we receive a calibration message.
       .gps_planner_active = false,
+      .recording = false,
   };
 
   s->rgb_width = back_bufs.width;
@@ -380,6 +413,9 @@ void handle_message(UIState *s,  Message* msg) {
   if (which == cereal::Event::CONTROLS_STATE && s->started) {
     auto data = event.getControlsState();
 
+    struct cereal_ControlsState_LateralPIDState pdata;
+    cereal_read_ControlsState_LateralPIDState(&pdata, datad.lateralControlState.pidState);
+
     s->controls_timeout = 1 * UI_FREQ;
     scene.frontview = data.getRearViewCam();
     if (!scene.frontview){ s->controls_seen = true; }
@@ -387,6 +423,7 @@ void handle_message(UIState *s,  Message* msg) {
     if (data.getVCruise() != scene.v_cruise) {
       scene.v_cruise_update_ts = event.getLogMonoTime();
     }
+<<<<<<< HEAD
     scene.v_cruise = data.getVCruise();
     scene.v_ego = data.getVEgo();
     scene.curvature = data.getCurvature();
@@ -400,6 +437,28 @@ void handle_message(UIState *s,  Message* msg) {
     const auto sound_none = cereal::CarControl::HUDControl::AudibleAlert::NONE;
     if (alert_sound != s->alert_sound){
       if (s->alert_sound != sound_none){
+=======
+    s->scene.v_cruise = datad.vCruise;
+    s->scene.v_ego = datad.vEgo;
+    s->scene.angleSteers = datad.angleSteers;
+    s->scene.curvature = datad.curvature;
+    s->scene.engaged = datad.enabled;
+    s->scene.engageable = datad.engageable;
+    s->scene.gps_planner_active = datad.gpsPlannerActive;
+    s->scene.monitoring_active = datad.driverMonitoringOn;
+    s->scene.steerOverride = datad.steerOverride;
+    s->scene.output_scale = pdata.output;
+
+    s->scene.frontview = datad.rearViewCam;
+
+    s->scene.decel_for_model = datad.decelForModel;
+
+    // getting steering related data for dev ui
+    s->scene.angleSteersDes = datad.angleSteersDes;
+
+    if (datad.alertSound != cereal_CarControl_HUDControl_AudibleAlert_none && datad.alertSound != s->alert_sound) {
+      if (s->alert_sound != cereal_CarControl_HUDControl_AudibleAlert_none) {
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
         stop_alert_sound(s->alert_sound);
       }
       if (alert_sound != sound_none){
@@ -548,6 +607,86 @@ static void check_messages(UIState *s) {
         delete msg;
       }
     }
+<<<<<<< HEAD
+=======
+    s->livempc_or_radarstate_changed = true;
+  } else if (eventd.which == cereal_Event_thermal) {
+    struct cereal_ThermalData datad;
+    cereal_read_ThermalData(&datad, eventd.thermal);
+
+    if (!datad.started) {
+      update_status(s, STATUS_STOPPED);
+    } else if (s->status == STATUS_STOPPED) {
+      // car is started but controls doesn't have fingerprint yet
+      update_status(s, STATUS_DISENGAGED);
+    }
+
+    s->scene.started_ts = datad.startedTs;
+    //BBB CPU TEMP
+    s->scene.maxCpuTemp = datad.cpu0;
+    if (s->scene.maxCpuTemp < datad.cpu1)
+    {
+      s->scene.maxCpuTemp = datad.cpu1;
+    }
+    else if (s->scene.maxCpuTemp < datad.cpu2)
+    {
+      s->scene.maxCpuTemp = datad.cpu2;
+    }
+    else if (s->scene.maxCpuTemp < datad.cpu3)
+    {
+      s->scene.maxCpuTemp = datad.cpu3;
+    }
+    s->scene.maxBatTemp = datad.bat;
+    s->scene.freeSpace = datad.freeSpace;
+    //BBB END CPU TEMP
+  } else if (eventd.which == cereal_Event_uiLayoutState) {
+    struct cereal_UiLayoutState datad;
+    cereal_read_UiLayoutState(&datad, eventd.uiLayoutState);
+    s->active_app = datad.activeApp;
+    s->scene.uilayout_sidebarcollapsed = datad.sidebarCollapsed;
+    s->scene.uilayout_mapenabled = datad.mapEnabled;
+
+    bool hasSidebar = !s->scene.uilayout_sidebarcollapsed;
+    bool mapEnabled = s->scene.uilayout_mapenabled;
+    if (mapEnabled) {
+      s->scene.ui_viz_rx = hasSidebar ? (box_x+nav_w) : (box_x+nav_w-(bdr_s*4));
+      s->scene.ui_viz_rw = hasSidebar ? (box_w-nav_w) : (box_w-nav_w+(bdr_s*4));
+      s->scene.ui_viz_ro = -(sbr_w + 4*bdr_s);
+    } else {
+      s->scene.ui_viz_rx = hasSidebar ? box_x : (box_x-sbr_w+bdr_s*2);
+      s->scene.ui_viz_rw = hasSidebar ? box_w : (box_w+sbr_w-(bdr_s*2));
+      s->scene.ui_viz_ro = hasSidebar ? -(sbr_w - 6*bdr_s) : 0;
+    }
+  } else if (eventd.which == cereal_Event_liveMapData) {
+    struct cereal_LiveMapData datad;
+    cereal_read_LiveMapData(&datad, eventd.liveMapData);
+    s->scene.map_valid = datad.mapValid;
+    s->scene.speedlimit = datad.speedLimit;
+    s->scene.speedlimitahead_valid = datad.speedLimitAheadValid;
+    s->scene.speedlimitaheaddistance = datad.speedLimitAheadDistance;
+    s->scene.speedlimit_valid = datad.speedLimitValid;
+  } else if (eventd.which == cereal_Event_carState) {
+    struct cereal_CarState datad;
+    cereal_read_CarState(&datad, eventd.carState);
+    s->scene.brakeLights = datad.brakeLights;
+    if(s->scene.leftBlinker!=datad.leftBlinker || s->scene.rightBlinker!=datad.rightBlinker)
+      s->scene.blinker_blinkingrate = 100;
+    s->scene.leftBlinker = datad.leftBlinker;
+    s->scene.rightBlinker = datad.rightBlinker;
+
+  } else if (eventd.which == cereal_Event_gpsLocationExternal) {
+    struct cereal_GpsLocationData datad;
+    cereal_read_GpsLocationData(&datad, eventd.gpsLocationExternal);
+    s->scene.gpsAccuracy = datad.accuracy;
+    if (s->scene.gpsAccuracy > 100)
+    {
+      s->scene.gpsAccuracy = 99.99;
+    }
+    else if (s->scene.gpsAccuracy == 0)
+    {
+      s->scene.gpsAccuracy = 99.8;
+    }
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
   }
 }
 
@@ -620,10 +759,16 @@ static void ui_update(UIState *s) {
 
     assert(glGetError() == GL_NO_ERROR);
 
+<<<<<<< HEAD
     s->scene.uilayout_sidebarcollapsed = true;
     update_offroad_layout_state(s);
     s->scene.ui_viz_rx = (box_x-sbr_w+bdr_s*2);
     s->scene.ui_viz_rw = (box_w+sbr_w-(bdr_s*2));
+=======
+    // Default UI Measurements (Assumes sidebar collapsed)
+    s->scene.ui_viz_rx = (box_x-sbr_w+bdr_is*2);
+    s->scene.ui_viz_rw = (box_w+sbr_w-(bdr_is*2));
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
     s->scene.ui_viz_ro = 0;
 
     s->vision_connect_firstrun = false;
@@ -970,6 +1115,13 @@ int main(int argc, char* argv[]) {
       }
     }
 
+    //awake on any touch
+    int touch_x = -1, touch_y = -1;
+    int touched = touch_poll(&touch, &touch_x, &touch_y, s->awake ? 0 : 100);
+    if (touched == 1) {
+      set_awake(s, true);
+    }
+
     // manage wakefulness
     if (s->awake_timeout > 0) {
       s->awake_timeout--;
@@ -977,6 +1129,7 @@ int main(int argc, char* argv[]) {
       set_awake(s, false);
     }
 
+<<<<<<< HEAD
     // manage hardware disconnect
     if (s->hardware_timeout > 0) {
       s->hardware_timeout--;
@@ -986,6 +1139,11 @@ int main(int argc, char* argv[]) {
 
     // Don't waste resources on drawing in case screen is off
     if (s->awake) {
+=======
+    // Don't waste resources on drawing in case screen is off or car is not started.
+    if (s->awake && s->vision_connected) {
+      dashcam(s, touch_x, touch_y);
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
       ui_draw(s);
       glFinish();
       should_swap = true;

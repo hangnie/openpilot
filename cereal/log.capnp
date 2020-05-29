@@ -827,6 +827,7 @@ struct PathPlan {
     left @1;
     right @2;
   }
+<<<<<<< HEAD
 }
 
 struct LiveLocationKalman {
@@ -873,6 +874,8 @@ struct LiveLocationKalman {
     std @1 : List(Float64);
     valid @2 : Bool;
   }
+=======
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 }
 
 struct LiveLocationData {

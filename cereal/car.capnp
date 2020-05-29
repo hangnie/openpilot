@@ -19,6 +19,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
   immediateDisable @6 :Bool;
   preEnable @7 :Bool;
   permanent @8 :Bool;
+  resetVCruise @9 :Bool;
 
   enum EventName @0xbaa8c5d505f727de {
     # TODO: copy from error list
@@ -91,6 +92,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     carUnrecognized @66;
     radarCommIssue @67;
     driverMonitorLowAcc @68;
+<<<<<<< HEAD
     invalidLkasSetting @69;
     speedTooHigh @70;
     laneChangeBlocked @71;
@@ -102,6 +104,13 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     leftLCAbsm @77;
     preventLCA @78;
     turningIndicatorOn @79;
+=======
+    turningIndicatorOn @69;
+    lkasButtonOff @70;
+    rightLCAbsm @71;
+    leftLCAbsm @72;
+    preventLCA @73;
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
   }
 }
 
@@ -153,15 +162,28 @@ struct CarState {
   leftBlinker @20 :Bool;
   rightBlinker @21 :Bool;
   genericToggle @23 :Bool;
+  distanceToggle @33 :Float32;
+  laneDepartureToggle @34 :Bool;
 
   # lock info
   doorOpen @24 :Bool;
   seatbeltUnlatched @25 :Bool;
   canValid @26 :Bool;
 
+
   # clutch (manual transmission only)
   clutchPressed @28 :Bool;
+<<<<<<< HEAD
   
+=======
+
+  readdistancelines @32 :Float32;
+  lkMode @35 :Bool;
+
+  lcaLeft @36 :Bool;
+  lcaRight @37 :Bool;
+
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
   # which packets this state came from
   canMonoTimes @12: List(UInt64);
 
@@ -393,11 +415,18 @@ struct CarParams {
   radarTimeStep @45: Float32 = 0.05;  # time delta between radar updates, 20Hz is very standard
   communityFeature @46: Bool;  # true if a community maintained feature is detected
   fingerprintSource @49: FingerprintSource;
+<<<<<<< HEAD
   networkLocation @50 :NetworkLocation;  # Where Panda/C2 is integrated into the car's CAN network
   mdpsBus @51: Int8;
   sasBus @52: Int8;
   sccBus @53: Int8;
   autoLcaEnabled @54: Bool;
+=======
+  mdpsBus @50: Int8;
+  sasBus @51: Int8;
+  sccBus @52: Int8;
+  autoLcaEnabled @53: Int8;
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 
   struct LateralParams {
     torqueBP @0 :List(Int32);
@@ -516,9 +545,13 @@ struct CarParams {
     fw @1;
     fixed @2;
   }
+<<<<<<< HEAD
 
   enum NetworkLocation {
     fwdCamera @0;  # Standard/default integration at LKAS camera
     gateway @1;    # Integration at vehicle's CAN gateway
   }
 }
+=======
+}
+>>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
