@@ -356,7 +356,7 @@ def data_send(sm, pm, CS, CI, CP, VM, state, events, actuators, v_cruise_kph, rk
   AM.process_alerts(sm.frame)
   CC.hudControl.visualAlert = AM.visual_alert
 
-  if not read_only:
+  if not read_only and CS.cruiseState.enabled:
     # send car controls over can
     can_sends = CI.apply(CC)
     pm.send('sendcan', can_list_to_can_capnp(can_sends, msgtype='sendcan', valid=CS.canValid))
