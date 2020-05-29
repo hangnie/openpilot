@@ -719,11 +719,7 @@ void TIM1_BRK_TIM9_IRQ_Handler(void) {
       puth(heartbeat_counter);
       puts(" seconds. Safety is set to SILENT mode.\n");
       if (current_safety_mode != SAFETY_ALLOUTPUT) {
-<<<<<<< HEAD
-        set_safety_mode(SAFETY_ALLOUTPUT, 0U); // MDPS will hard if SAFETY_NOOUTPUT
-=======
         set_safety_mode(SAFETY_ALLOUTPUT, 0U); // MDPS will hard fault if SAFETY_NOOUTPUT
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
       }
 	 // MDPS will if panda sleep
      // if (power_save_status != POWER_SAVE_STATUS_ENABLED) {
@@ -833,11 +829,7 @@ int main(void) {
   // use TIM2->CNT to read
 
   // init to SILENT and can silent
-<<<<<<< HEAD
-  set_safety_mode(SAFETY_ALLOUTPUT, 0); // MDPS will hard if SAFETY_NOOUTPUT
-=======
   set_safety_mode(SAFETY_ALLOUTPUT, 0); // MDPS will hard fault if SAFETY_NOOUTPUT
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 
   // enable CAN TXs
   current_board->enable_can_transcievers(true);

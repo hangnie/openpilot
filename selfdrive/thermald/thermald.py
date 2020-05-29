@@ -17,12 +17,8 @@ from selfdrive.swaglog import cloudlog
 import cereal.messaging as messaging
 from selfdrive.loggerd.config import get_available_percent
 from selfdrive.pandad import get_expected_signature
-<<<<<<< HEAD:selfdrive/thermald/thermald.py
-from selfdrive.thermald.power_monitoring import PowerMonitoring, get_battery_capacity, get_battery_status, get_battery_current, get_battery_voltage, get_usb_present
-=======
 from selfdrive.kegman_conf import kegman_conf
 kegman = kegman_conf()
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99:selfdrive/thermald.py
 
 FW_SIGNATURE = get_expected_signature()
 
@@ -152,8 +148,6 @@ def handle_fan_uno(max_cpu_temp, bat_temp, fan_speed, ignition):
 
   return new_speed
 
-<<<<<<< HEAD:selfdrive/thermald/thermald.py
-=======
 def check_car_battery_voltage(should_start, health, charging_disabled, msg):
 
   # charging disallowed if:
@@ -174,7 +168,6 @@ def check_car_battery_voltage(should_start, health, charging_disabled, msg):
 
   return charging_disabled
 
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99:selfdrive/thermald.py
 
 def thermald_thread():
   # prevent LEECO from undervoltage
@@ -226,40 +219,6 @@ def thermald_thread():
     if health is not None:
       usb_power = health.health.usbPowerMode != log.HealthData.UsbPowerMode.client
 
-<<<<<<< HEAD:selfdrive/thermald/thermald.py
-      # If we lose connection to the panda, wait 5 seconds before going offroad
-      if health.health.hwType == log.HealthData.HwType.unknown:
-        no_panda_cnt += 1
-        if no_panda_cnt > DISCONNECT_TIMEOUT / DT_TRML:
-          if ignition:
-            cloudlog.error("Lost panda connection while onroad")
-          ignition = False
-      else:
-        no_panda_cnt = 0
-        ignition = health.health.ignitionLine or health.health.ignitionCan
-
-      # Setup fan handler on first connect to panda
-      if handle_fan is None and health.health.hwType != log.HealthData.HwType.unknown:
-        is_uno = health.health.hwType == log.HealthData.HwType.uno
-
-        if is_uno or not ANDROID:
-          cloudlog.info("Setting up UNO fan handler")
-          handle_fan = handle_fan_uno
-        else:
-          cloudlog.info("Setting up EON fan handler")
-          setup_eon_fan()
-          handle_fan = handle_fan_eon
-
-      # Handle disconnect
-      if health_prev is not None:
-        if health.health.hwType == log.HealthData.HwType.unknown and \
-          health_prev.health.hwType != log.HealthData.HwType.unknown:
-          params.panda_disconnect()
-      health_prev = health
-
-    # get_network_type is an expensive call. update every 10s
-=======
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99:selfdrive/thermald.py
     if (count % int(10. / DT_TRML)) == 0:
       try:
         network_type = get_network_type()
@@ -333,34 +292,6 @@ def thermald_thread():
     time_valid_prev = time_valid
 
     # Show update prompt
-<<<<<<< HEAD:selfdrive/thermald/thermald.py
-    try:
-      last_update = datetime.datetime.fromisoformat(params.get("LastUpdateTime", encoding='utf8'))
-    except (TypeError, ValueError):
-      last_update = now
-    dt = now - last_update
-
-    update_failed_count = params.get("UpdateFailedCount")
-    update_failed_count = 0 if update_failed_count is None else int(update_failed_count)
-
-    if dt.days > DAYS_NO_CONNECTIVITY_MAX and update_failed_count > 1:
-      if current_connectivity_alert != "expired":
-        current_connectivity_alert = "expired"
-        params.delete("Offroad_ConnectivityNeededPrompt")
-        put_nonblocking("Offroad_ConnectivityNeeded", json.dumps(OFFROAD_ALERTS["Offroad_ConnectivityNeeded"]))
-    elif dt.days > DAYS_NO_CONNECTIVITY_PROMPT:
-      remaining_time = str(max(DAYS_NO_CONNECTIVITY_MAX - dt.days, 0))
-      if current_connectivity_alert != "prompt" + remaining_time:
-        current_connectivity_alert = "prompt" + remaining_time
-        alert_connectivity_prompt = copy.copy(OFFROAD_ALERTS["Offroad_ConnectivityNeededPrompt"])
-        alert_connectivity_prompt["text"] += remaining_time + " days."
-        params.delete("Offroad_ConnectivityNeeded")
-        put_nonblocking("Offroad_ConnectivityNeededPrompt", json.dumps(alert_connectivity_prompt))
-    elif current_connectivity_alert is not None:
-      current_connectivity_alert = None
-      params.delete("Offroad_ConnectivityNeeded")
-      params.delete("Offroad_ConnectivityNeededPrompt")
-=======
 #    try:
 #      last_update = datetime.datetime.fromisoformat(params.get("LastUpdateTime", encoding='utf8'))
 #    except (TypeError, ValueError):
@@ -387,7 +318,6 @@ def thermald_thread():
 #      current_connectivity_alert = None
 #      params.delete("Offroad_ConnectivityNeeded")
 #      params.delete("Offroad_ConnectivityNeededPrompt")
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99:selfdrive/thermald.py
 
     do_uninstall = params.get("DoUninstall") == b"1"
     accepted_terms = params.get("HasAcceptedTerms") == terms_version
@@ -455,12 +385,6 @@ def thermald_thread():
          started_seen and (sec_since_boot() - off_ts) > 60:
         os.system('LD_LIBRARY_PATH="" svc power shutdown')
 
-<<<<<<< HEAD:selfdrive/thermald/thermald.py
-    # Offroad power monitoring
-    pm.calculate(health)
-    msg.thermal.offroadPowerUsage = pm.get_power_used()
-
-=======
     charging_disabled = check_car_battery_voltage(should_start, health, charging_disabled, msg)
 
     if msg.thermal.batteryCurrent > 0:
@@ -470,7 +394,6 @@ def thermald_thread():
 
     
     msg.thermal.chargingDisabled = charging_disabled
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99:selfdrive/thermald.py
     msg.thermal.chargingError = current_filter.x > 0. and msg.thermal.batteryPercent < 90  # if current is positive, then battery is being discharged
     msg.thermal.started = started_ts is not None
     msg.thermal.startedTs = int(1e9*(started_ts or 0))
@@ -488,11 +411,8 @@ def thermald_thread():
     fw_version_match_prev = fw_version_match
     should_start_prev = should_start
 
-<<<<<<< HEAD:selfdrive/thermald/thermald.py
-=======
     print(msg)
 
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99:selfdrive/thermald.py
     # report to server once per minute
     if (count % int(60. / DT_TRML)) == 0:
       cloudlog.event("STATUS_PACKET",

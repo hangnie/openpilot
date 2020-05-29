@@ -165,18 +165,6 @@ typedef struct UIScene {
   // Used to show gps planner status
   bool gps_planner_active;
 
-<<<<<<< HEAD
-  cereal::ThermalData::NetworkType networkType;
-  cereal::ThermalData::NetworkStrength networkStrength;
-  int batteryPercent;
-  bool batteryCharging;
-  float freeSpace;
-  cereal::ThermalData::ThermalStatus thermalStatus;
-  int paTemp;
-  cereal::HealthData::HwType hwType;
-  int satelliteCount;
-  uint8_t athenaStatus;
-=======
   // dev ui
   uint16_t maxCpuTemp;
   uint32_t maxBatTemp;
@@ -186,7 +174,6 @@ typedef struct UIScene {
   float freeSpace;
   float gpsAccuracy;
 
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 } UIScene;
 
 typedef struct {
@@ -223,15 +210,7 @@ typedef struct UIState {
   int img_turn;
   int img_face;
   int img_map;
-<<<<<<< HEAD
-  int img_button_settings;
-  int img_button_home;
-  int img_battery;
-  int img_battery_charging;
-  int img_network[6];
-=======
   int img_brake;
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 
   // sockets
   Context *ctx;
@@ -241,19 +220,10 @@ typedef struct UIState {
   SubSocket *radarstate_sock;
   SubSocket *map_data_sock;
   SubSocket *uilayout_sock;
-<<<<<<< HEAD
-  SubSocket *thermal_sock;
-  SubSocket *health_sock;
-  SubSocket *ubloxgnss_sock;
-  SubSocket *driverstate_sock;
-  SubSocket *dmonitoring_sock;
-  PubSocket *offroad_sock;
-=======
   SubSocket *carstate_sock;
   SubSocket *gpslocation_sock;
   SubSocket *gpslocationexternal_sock;
   SubSocket *livempc_sock;
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
   Poller * poller;
   Poller * ublox_poller;
 

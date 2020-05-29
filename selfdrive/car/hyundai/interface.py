@@ -2,11 +2,8 @@
 from cereal import car
 from selfdrive.config import Conversions as CV
 from selfdrive.controls.lib.drive_helpers import EventTypes as ET, create_event
-<<<<<<< HEAD
-=======
 from selfdrive.controls.lib.vehicle_model import VehicleModel
 from selfdrive.car.hyundai.carstate import CarState, get_can_parser, get_can2_parser, get_camera_parser
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 from selfdrive.car.hyundai.values import Ecu, ECU_FINGERPRINT, CAR, FINGERPRINTS
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, is_ecu_disconnected, gen_empty_fingerprint
 from selfdrive.car.interfaces import CarInterfaceBase
@@ -14,12 +11,6 @@ from selfdrive.car.interfaces import CarInterfaceBase
 GearShifter = car.CarState.GearShifter
 
 class CarInterface(CarInterfaceBase):
-<<<<<<< HEAD
-  def __init__(self, CP, CarController, CarState):
-    super().__init__(CP, CarController, CarState)
-    self.cp2 = self.CS.get_can2_parser(CP)
-    self.lkas_button_alert = False
-=======
   def __init__(self, CP, CarController):
     self.CP = CP
     self.VM = VehicleModel(CP)
@@ -40,7 +31,6 @@ class CarInterface(CarInterfaceBase):
     self.CC = None
     if CarController is not None:
       self.CC = CarController(self.cp.dbc_name, CP.carFingerprint)
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 
   @staticmethod
   def compute_gb(accel, speed):
@@ -51,23 +41,13 @@ class CarInterface(CarInterfaceBase):
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint, has_relay)
 
     ret.carName = "hyundai"
-<<<<<<< HEAD
-=======
     ret.carFingerprint = candidate
     ret.isPandaBlack = has_relay
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
     ret.safetyModel = car.CarParams.SafetyModel.hyundai
 
     # Hyundai port is a community feature for now
     ret.communityFeature = True
 
-<<<<<<< HEAD
-    ret.steerActuatorDelay = 0.1  # Default delay
-    ret.steerRateCost = 0.5
-    ret.steerLimitTimer = 0.8
-    tire_stiffness_factor = 1.
-
-=======
     ret.steerActuatorDelay = 0.15  # Default delay
     ret.steerRateCost = 0.45
     ret.steerLimitTimer = 0.8
@@ -75,7 +55,6 @@ class CarInterface(CarInterfaceBase):
 
     ret.minEnableSpeed = -1.   # enable is done by stock ACC, so ignore this
 
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
     if candidate in [CAR.SANTA_FE, CAR.SANTA_FE_1]:
       ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 3982. * CV.LB_TO_KG + STD_CARGO_KG
@@ -113,14 +92,6 @@ class CarInterface(CarInterfaceBase):
       ret.steerRatio = 14.4 * 1.1   # 10% higher at the center seems reasonable
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
-<<<<<<< HEAD
-    elif candidate in [CAR.ELANTRA, CAR.ELANTRA_GT_I30]:
-      ret.lateralTuning.pid.kf = 0.00006
-      ret.mass = 1275. + STD_CARGO_KG
-      ret.wheelbase = 2.7
-      ret.steerRatio = 15.4            # 14 is Stock | Settled Params Learner values are steerRatio: 15.401566348670535
-      tire_stiffness_factor = 0.385    # stiffnessFactor settled on 1.0081302973865127
-=======
       ret.minSteerSpeed = 0.
     elif candidate in [CAR.ELANTRA, CAR.ELANTRA_GT_I30]:
       ret.lateralTuning.pid.kf = 0.00005
@@ -128,16 +99,11 @@ class CarInterface(CarInterfaceBase):
       ret.wheelbase = 2.7
       ret.steerRatio = 13.73   #Spec
       tire_stiffness_factor = 0.685
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.10], [0.02]]
       ret.minSteerSpeed = 32 * CV.MPH_TO_MS
-<<<<<<< HEAD
-    elif candidate == CAR.HYUNDAI_GENESIS:
-=======
       ret.minEnableSpeed = 32 * CV.MPH_TO_MS
     elif candidate == CAR.GENESIS:
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
       ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 2060. + STD_CARGO_KG
       ret.wheelbase = 3.01
@@ -152,16 +118,6 @@ class CarInterface(CarInterfaceBase):
       ret.steerRatio = 12.069
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.16], [0.01]]
-<<<<<<< HEAD
-      ret.minSteerSpeed = 60 * CV.KPH_TO_MS
-    elif candidate in [CAR.GENESIS_G90, CAR.GENESIS_G80]:
-      ret.mass = 2200
-      ret.wheelbase = 3.15
-      ret.steerRatio = 12.069
-      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.16], [0.01]]
-=======
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
     elif candidate in [CAR.KIA_OPTIMA, CAR.KIA_OPTIMA_H]:
       ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 3558. * CV.LB_TO_KG
@@ -265,8 +221,6 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
 
-<<<<<<< HEAD
-=======
     ret.longitudinalTuning.kpBP = [0., 5., 35.]
     ret.longitudinalTuning.kpV = [1.2, 0.8, 0.5]
     ret.longitudinalTuning.kiBP = [0., 35.]
@@ -274,7 +228,6 @@ class CarInterface(CarInterfaceBase):
     ret.longitudinalTuning.deadzoneBP = [0.]
     ret.longitudinalTuning.deadzoneV = [0.]
 
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
     ret.centerToFront = ret.wheelbase * 0.4
 
     # TODO: get actual value, for now starting with reasonable value for
@@ -317,13 +270,7 @@ class CarInterface(CarInterfaceBase):
     ret.sasBus = 1 if 688 in fingerprint[1] and 1296 not in fingerprint[1] else 0
     ret.sccBus = 0 if 1056 in fingerprint[0] else 1 if 1056 in fingerprint[1] and 1296 not in fingerprint[1] \
                                                                      else 2 if 1056 in fingerprint[2] else -1
-<<<<<<< HEAD
-    ret.radarOffCan = ret.sccBus == -1
-    ret.openpilotLongitudinalControl = bool(ret.sccBus and not ret.radarOffCan)
-    ret.autoLcaEnabled = False
-=======
     ret.autoLcaEnabled = 1
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 
     return ret
 
@@ -332,10 +279,6 @@ class CarInterface(CarInterfaceBase):
     self.cp2.update_strings(can_strings)
     self.cp_cam.update_strings(can_strings)
 
-<<<<<<< HEAD
-    ret = self.CS.update(self.cp, self.cp2, self.cp_cam)
-    ret.canValid = self.cp.can_valid and self.cp2.can_valid and self.cp_cam.can_valid
-=======
     self.CS.update(self.cp, self.cp2, self.cp_cam)
     # create message
     ret = car.CarState.new_message()
@@ -368,7 +311,6 @@ class CarInterface(CarInterfaceBase):
     # steering wheel
     ret.steeringAngle = self.CS.angle_steers
     ret.steeringRate = self.CS.angle_steers_rate  # it's unsigned
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 
     # most HKG cars has no long control, it is safer and easier to engage by main on
     ret.cruiseState.enabled = ret.cruiseState.available if not self.CC.longcontrol else ret.cruiseState.enabled
@@ -377,39 +319,6 @@ class CarInterface(CarInterfaceBase):
       ret.leftBlinker = self.CS.left_blinker_flash or self.CS.prev_left_blinker and self.CC.turning_signal_timer
       ret.rightBlinker = self.CS.right_blinker_flash or self.CS.prev_right_blinker and self.CC.turning_signal_timer
 
-<<<<<<< HEAD
-    # turning indicator alert logic
-    if (ret.leftBlinker or ret.rightBlinker or self.CC.turning_signal_timer) and ret.vEgo < 16.7:
-      self.turning_indicator_alert = True 
-    else:
-      self.turning_indicator_alert = False
-
-    # LKAS button alert logic: reverse on/off
-    #if not self.CS.lkas_error and self.CS.lkas_button_on != self.CS.prev_lkas_button_on:
-      #self.CC.lkas_button_on = not self.CC.lkas_button_on
-      #self.lkas_button_alert = not self.CC.lkas_button_on
-
-    # low speed steer alert hysteresis logic (only for cars with steer cut off above 10 m/s)
-    if ret.vEgo < (self.CP.minSteerSpeed + 0.2) and self.CP.minSteerSpeed > 10.:
-      self.low_speed_alert = True
-    if ret.vEgo > (self.CP.minSteerSpeed + 0.7):
-      self.low_speed_alert = False
-
-    # TODO: button presses
-    ret.buttonEvents = []
-
-    #events = self.create_common_events(ret)
-    #TODO: addd abs(self.CS.angle_steers) > 90 to 'steerTempUnavailable' event
-
-    events = []
-    if not ret.gearShifter == GearShifter.drive:
-      events.append(create_event('wrongGear', [ET.NO_ENTRY, ET.USER_DISABLE]))
-    if ret.doorOpen:
-      events.append(create_event('doorOpen', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
-    if ret.seatbeltUnlatched:
-      events.append(create_event('seatbeltNotLatched', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
-    if ret.espDisabled:
-=======
     # cruise state
     # most HKG cars has no long control, it is safer and easier to engage by main on
     ret.cruiseState.enabled = (self.CS.pcm_acc_status != 0) if self.CC.longcontrol else bool(self.CS.main_on)
@@ -465,7 +374,6 @@ class CarInterface(CarInterfaceBase):
 #    if ret.seatbeltUnlatched:
 #      events.append(create_event('seatbeltNotLatched', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
     if self.CS.esp_disabled:
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
       events.append(create_event('espDisabled', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
     if not ret.cruiseState.available:
       events.append(create_event('wrongCarMode', [ET.NO_ENTRY, ET.USER_DISABLE]))
@@ -480,13 +388,8 @@ class CarInterface(CarInterfaceBase):
       events.append(create_event('pcmDisable', [ET.USER_DISABLE]))
 
     # disable on pedals rising edge or when brake is pressed and speed isn't zero
-<<<<<<< HEAD
-    if ((ret.gasPressed and not self.CS.out.gasPressed) or \
-      (ret.brakePressed and (not self.CS.out.brakePressed or ret.vEgoRaw > 0.1))) and self.CC.longcontrol:
-=======
     if ((ret.gasPressed and not self.gas_pressed_prev) or \
       (ret.brakePressed and (not self.brake_pressed_prev or ret.vEgoRaw > 0.1))) and self.CC.longcontrol:
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
       events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
 
     if ret.gasPressed and self.CC.longcontrol:
@@ -516,15 +419,6 @@ class CarInterface(CarInterfaceBase):
 
     ret.events = events
 
-<<<<<<< HEAD
-    self.CS.out = ret.as_reader()
-    return self.CS.out
-
-  def apply(self, c):
-    can_sends = self.CC.update(c.enabled, self.CS, self.frame, c.actuators,
-                               c.cruiseControl.cancel, c.hudControl.visualAlert, c.hudControl.leftLaneVisible,
-                               c.hudControl.rightLaneVisible, c.hudControl.leftLaneDepart, c.hudControl.rightLaneDepart)
-=======
     self.gas_pressed_prev = ret.gasPressed
     self.brake_pressed_prev = ret.brakePressed
     self.cruise_enabled_prev = ret.cruiseState.enabled
@@ -538,6 +432,5 @@ class CarInterface(CarInterfaceBase):
                                c.cruiseControl.cancel, c.hudControl.visualAlert, c.hudControl.leftLaneVisible,
                                c.hudControl.rightLaneVisible, c.hudControl.leftLaneDepart, c.hudControl.rightLaneDepart)
 
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
     self.frame += 1
     return can_sends

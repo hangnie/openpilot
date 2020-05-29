@@ -112,13 +112,8 @@ class PathPlanner():
 
     angle_offset = sm['liveParameters'].angleOffset
 
-<<<<<<< HEAD
-    lca_left = sm['carState'].leftBlindspot
-    lca_right = sm['carState'].rightBlindspot
-=======
     lca_left = sm['carState'].lcaLeft
     lca_right = sm['carState'].lcaRight
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 
     # Run MPC
     self.angle_steers_des_prev = self.angle_steers_des_mpc
@@ -180,21 +175,12 @@ class PathPlanner():
 
       if self.lane_change_direction == LaneChangeDirection.left:
         torque_applied = sm['carState'].steeringTorque > 0 and sm['carState'].steeringPressed
-<<<<<<< HEAD
-        if CP.autoLcaEnabled and 2.5 > self.pre_auto_LCA_timer > 2.0 and not lca_left:
-          torque_applied = True # Enable auto LCA only once after 2 sec 
-      else:
-        torque_applied = sm['carState'].steeringTorque < 0 and sm['carState'].steeringPressed
-        if CP.autoLcaEnabled and 2.5 > self.pre_auto_LCA_timer > 2.0 and not lca_right:
-          torque_applied = True # Enable auto LCA only once after 2 sec 
-=======
         if CP.autoLcaEnabled and 1.6 > self.pre_auto_LCA_timer > 1.1 and not lca_left:
           torque_applied = True # Enable auto LCA only once after 1 sec 
       else:
         torque_applied = sm['carState'].steeringTorque < 0 and sm['carState'].steeringPressed
         if CP.autoLcaEnabled and 1.6 > self.pre_auto_LCA_timer > 1.1 and not lca_right:
           torque_applied = True # Enable auto LCA only once after 1 sec 
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 
       lane_change_prob = self.LP.l_lane_change_prob + self.LP.r_lane_change_prob
 
@@ -228,29 +214,12 @@ class PathPlanner():
         else:
           # starting
           self.lane_change_BSM = LaneChangeBSM.off
-<<<<<<< HEAD
-          if self.lane_change_state == LaneChangeState.laneChangeStarting:
-            # fade out lanelines over .2s
-            self.lane_change_ll_prob = max(self.lane_change_ll_prob - DT_MDL/5, 0.0)
-            # 98% certainty
-            if lane_change_prob < 0.02 and self.lane_change_ll_prob < 0.01:
-              self.lane_change_state = LaneChangeState.laneChangeFinishing
-
-      # starting
-      #elif self.lane_change_state == LaneChangeState.laneChangeStarting:
-        # fade out lanelines over .2s
-        #self.lane_change_ll_prob = max(self.lane_change_ll_prob - DT_MDL/5, 0.0)
-        # 98% certainty
-        #if lane_change_prob < 0.02 and self.lane_change_ll_prob < 0.01:
-          #self.lane_change_state = LaneChangeState.laneChangeFinishing
-=======
           if self.lane_change_state == LaneChangeState.laneChangeStarting and lane_change_prob > 0.5:
             self.lane_change_state = LaneChangeState.laneChangeFinishing
 
       # starting
       #elif self.lane_change_state == LaneChangeState.laneChangeStarting and lane_change_prob > 0.5:
         #self.lane_change_state = LaneChangeState.laneChangeFinishing
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
 
       # finishing
       elif self.lane_change_state == LaneChangeState.laneChangeFinishing:

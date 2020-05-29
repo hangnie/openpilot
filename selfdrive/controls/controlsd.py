@@ -83,11 +83,6 @@ def data_sample(CI, CC, sm, can_sock, state, mismatch_counter, can_error_counter
   add_lane_change_event(events, sm['pathPlan'])
   enabled = isEnabled(state)
   lane_change_bsm = sm['pathPlan'].laneChangeBSM
-<<<<<<< HEAD
-  
-=======
-
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
   # Check for CAN timeout
   if not can_strs:
     can_error_counter += 1
@@ -98,14 +93,6 @@ def data_sample(CI, CC, sm, can_sock, state, mismatch_counter, can_error_counter
   low_battery = sm['thermal'].batteryPercent < 1 and sm['thermal'].chargingError  # at zero percent battery, while discharging, OP should not allowed
   mem_low = sm['thermal'].memUsedPercent > 90
 
-<<<<<<< HEAD
-  #bsm alerts 
-  if lane_change_bsm == LaneChangeBSM.left:
-    events.append(create_event('preventLCA', [ET.WARNING])) 
-  if lane_change_bsm == LaneChangeBSM.right:
-    events.append(create_event('preventLCA', [ET.WARNING]))
-    
-=======
   #bsm alerts
   if lane_change_bsm == LaneChangeBSM.left:
       events.append(create_event('preventLCA', [ET.WARNING]))
@@ -113,7 +100,6 @@ def data_sample(CI, CC, sm, can_sock, state, mismatch_counter, can_error_counter
       events.append(create_event('preventLCA', [ET.WARNING]))
   
 
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
   # Create events for battery, temperature and disk space
   if low_battery:
     events.append(create_event('lowBattery', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
@@ -299,11 +285,7 @@ def state_control(frame, rcv_frame, plan, path_plan, CS, CP, state, events, v_cr
   saturated_count = saturated_count + 1 if angle_control_saturated and not CS.steeringPressed and active else 0
 
   # Send a "steering required alert" if saturation count has reached the limit
-<<<<<<< HEAD
-  if (lac_log.saturated and not CS.steeringPressed) or (saturated_count > STEER_ANGLE_SATURATION_TIMEOUT):
-=======
 #  if lac_log.saturated and not CS.steeringPressed:
->>>>>>> e5e6f1f84f07fd9520362364bb61cd0f62bcae99
     # Check if we deviated from the path
 #    left_deviation = actuators.steer > 0 and path_plan.dPoly[3] > 0.1
 #    right_deviation = actuators.steer < 0 and path_plan.dPoly[3] < -0.1
