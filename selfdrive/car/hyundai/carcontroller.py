@@ -169,7 +169,7 @@ class CarController():
     #  self.scc12_cnt += 1
     
     #50 message per second
-     if frame % 2 == 0:
+     if not (frame % 2):
       can_sends.append(create_scc11(self.packer, enabled, self.scc11_cnt))
       self.scc11_cnt += 1
       self.scc12_cnt += 1
@@ -184,6 +184,7 @@ class CarController():
     if not (frame % 20):
       if self.sccEmulation:
         can_sends.append(create_scc13(self.packer))
+
 
 
     if CS.stopped:
