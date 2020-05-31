@@ -94,7 +94,7 @@ def create_clu11(packer, bus, clu11, button, speed, cnt):
   }
 
   return packer.make_can_msg("CLU11", bus, values)
-def create_scc11(packer, enabled, count, sccEmulation):
+def create_scc11(packer, enabled, count, sccEmulation, scc11):
   if sccEmulation:
     values = {
       "MainMode_ACC": 1,
@@ -115,19 +115,19 @@ def create_scc11(packer, enabled, count, sccEmulation):
     }
   else: 
     values = {
-      "MainMode_ACC": 0,
-      "SCCInfoDisplay": 0,
+      "MainMode_ACC": scc11["MainMode_ACC"], #0,
+      "SCCInfoDisplay": scc11["MainMode_ACC"], #0,
       "AliveCounterACC": count,
-      "VSetDis": 0,  # km/h velosity
+      "VSetDis": scc11["VSetDis"], #0,  # km/h velosity
       "ObjValid": 0,
       "DriverAlertDisplay": 0,
-      "TauGapSet": 4,
+      "TauGapSet": scc11["TauGapSet"],
       "Navi_SCC_Curve_Status": 0,
       "Navi_SCC_Curve_Act": 0,
       "Navi_SCC_Camera_Act": 0,
       "Navi_SCC_Camera_Status": 0,
       "ACC_ObjStatus": 0,
-      "ACC_ObjDist": 150,
+      "ACC_ObjDist": scc11["ACC_ObjDist"],
       "ACC_ObjLatPos":0,
       "ACC_ObjRelSpd":0,
     }
@@ -190,7 +190,7 @@ def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
 
   return packer.make_can_msg("SCC12", 0, values)
 
-def create_scc13(packer):
+def create_scc13(packer, sccEmulation):
   values = {
     "SCCDrvModeRValue" : 2,
     "SCC_Equip" : 1,
