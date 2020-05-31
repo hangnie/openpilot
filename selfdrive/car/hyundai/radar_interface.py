@@ -9,10 +9,10 @@ from selfdrive.car.hyundai.values import DBC
 def get_radar_can_parser(CP):
   signals = [
     # sig_name, sig_address, default
-    ("ACC_ObjStatus", "SCC11", 0),
-    ("ACC_ObjLatPos", "SCC11", 0),
-    ("ACC_ObjDist", "SCC11", 0),
-    ("ACC_ObjRelSpd", "SCC11", 0),
+    ("ACC_ObjStatus", "SCC11", 1),
+    ("ACC_ObjLatPos", "SCC11", 1),
+    ("ACC_ObjDist", "SCC11", 1),
+    ("ACC_ObjRelSpd", "SCC11", 1),
   ]
   checks = [
     # address, frequency
