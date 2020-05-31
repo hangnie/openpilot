@@ -73,7 +73,7 @@ class CarController():
     self.lkas_button_last = 0
     self.longcontrol = 0 #TODO: make auto
     
-    self.sccEmulation = 1 #car_fingerprint in FEATURES["use_scc_emulation"]
+    self.sccEmulation = 0 #car_fingerprint in FEATURES["use_scc_emulation"]
 
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
@@ -170,7 +170,7 @@ class CarController():
     
     #50 message per second
     if not (frame % 2):
-      can_sends.append(create_scc11(self.packer, enabled, self.scc11_cnt))
+      can_sends.append(create_scc11(self.packer, enabled, self.scc11_cnt, self.sccEmulation))
       self.scc11_cnt += 1
       self.scc12_cnt += 1
       can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, self.sccEmulation, CS.scc12))  # send scc12 to car if scc emulation is enabled or

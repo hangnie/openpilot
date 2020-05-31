@@ -94,31 +94,45 @@ def create_clu11(packer, bus, clu11, button, speed, cnt):
   }
 
   return packer.make_can_msg("CLU11", bus, values)
-def create_scc11(packer, enabled, count):
-  objValid = 0
-  objStatus = 0
-  objDist = 150
-  if enabled:
-    objValid = 1
-    objStatus = 1
-    objDist = 3
-  values = {
-    "MainMode_ACC": enabled,
-    "SCCInfoDisplay": 0,
-    "AliveCounterACC": count,
-    "VSetDis": 0,  # km/h velosity
-    "ObjValid": objValid,
-    "DriverAlertDisplay": 0,
-    "TauGapSet": 1,
-    "Navi_SCC_Curve_Status": 0,
-    "Navi_SCC_Curve_Act": 0,
-    "Navi_SCC_Camera_Act": 0,
-    "Navi_SCC_Camera_Status": 0,
-    "ACC_ObjStatus": objStatus,
-    "ACC_ObjDist": objDist,
-    "ACC_ObjLatPos":0,
-    "ACC_ObjRelSpd":0,
-  }
+def create_scc11(packer, enabled, count, sccEmulation):
+  if sccEmulation:
+    values = {
+      "MainMode_ACC": 1,
+      "SCCInfoDisplay": 0,
+      "AliveCounterACC": count,
+      "VSetDis": 0,  # km/h velosity
+      "ObjValid": 0,
+      "DriverAlertDisplay": 0,
+      "TauGapSet": 4,
+      "Navi_SCC_Curve_Status": 0,
+      "Navi_SCC_Curve_Act": 0,
+      "Navi_SCC_Camera_Act": 0,
+      "Navi_SCC_Camera_Status": 0,
+      "ACC_ObjStatus": 0,
+      "ACC_ObjDist": 150,
+      "ACC_ObjLatPos":0,
+      "ACC_ObjRelSpd":0,
+    }
+  else: 
+    values = {
+      "MainMode_ACC": 0,
+      "SCCInfoDisplay": 0,
+      "AliveCounterACC": count,
+      "VSetDis": 0,  # km/h velosity
+      "ObjValid": 0,
+      "DriverAlertDisplay": 0,
+      "TauGapSet": 4,
+      "Navi_SCC_Curve_Status": 0,
+      "Navi_SCC_Curve_Act": 0,
+      "Navi_SCC_Camera_Act": 0,
+      "Navi_SCC_Camera_Status": 0,
+      "ACC_ObjStatus": 0,
+      "ACC_ObjDist": 150,
+      "ACC_ObjLatPos":0,
+      "ACC_ObjRelSpd":0,
+    }
+
+  
   return packer.make_can_msg("SCC11", 0, values)
 
 
