@@ -115,7 +115,7 @@ def create_scc11(packer, enabled, count, sccEmulation, scc11):
     }
   else: 
     values = {
-      "MainMode_ACC": scc11["MainMode_ACC"], #0,
+      "MainMode_ACC": 1, #scc11["MainMode_ACC"], #0,
       "SCCInfoDisplay": scc11["MainMode_ACC"], #0,
       "AliveCounterACC": count,
       "VSetDis": scc11["VSetDis"], #0,  # km/h velosity
