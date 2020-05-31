@@ -184,7 +184,7 @@ class CarController():
     #  self.fca11_cnt +=1
     # 5 message per second
     if not (frame % 20):
-      print("scc13", end=' ')
+      print("scc13")
       can_sends.append(create_scc13(self.packer, self.sccEmulation))
 
 
