@@ -95,25 +95,25 @@ def create_clu11(packer, bus, clu11, button, speed, cnt):
 
   return packer.make_can_msg("CLU11", bus, values)
 def create_scc11(packer, enabled, count, sccEmulation, scc11):
-  if sccEmulation:
-    values = {
-      "MainMode_ACC": 1,
-      "SCCInfoDisplay": 0,
-      "AliveCounterACC": count,
-      "VSetDis": 0,  # km/h velosity
-      "ObjValid": 0,
-      "DriverAlertDisplay": 0,
-      "TauGapSet": 4,
-      "Navi_SCC_Curve_Status": 0,
-      "Navi_SCC_Curve_Act": 0,
-      "Navi_SCC_Camera_Act": 0,
-      "Navi_SCC_Camera_Status": 0,
-      "ACC_ObjStatus": 0,
-      "ACC_ObjDist": 150,
-      "ACC_ObjLatPos":0,
-      "ACC_ObjRelSpd":0,
-    }
-  else: 
+  # if sccEmulation:
+  #   values = {
+  #     "MainMode_ACC": 1,
+  #     "SCCInfoDisplay": 0,
+  #     "AliveCounterACC": count,
+  #     "VSetDis": 0,  # km/h velosity
+  #     "ObjValid": 0,
+  #     "DriverAlertDisplay": 0,
+  #     "TauGapSet": 4,
+  #     "Navi_SCC_Curve_Status": 0,
+  #     "Navi_SCC_Curve_Act": 0,
+  #     "Navi_SCC_Camera_Act": 0,
+  #     "Navi_SCC_Camera_Status": 0,
+  #     "ACC_ObjStatus": 0,
+  #     "ACC_ObjDist": 150,
+  #     "ACC_ObjLatPos":0,
+  #     "ACC_ObjRelSpd":0,
+  #   }
+  # else: 
     values = {
       "MainMode_ACC": 1, #scc11["MainMode_ACC"], #0,
       "SCCInfoDisplay": 0,
@@ -137,31 +137,31 @@ def create_scc11(packer, enabled, count, sccEmulation, scc11):
 
 
 def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
-  if sccEmulation:
-    values = {
-      "CF_VSM_Prefill": 0,
-      "CF_VSM_DecCmdAct": 0,
-      "CF_VSM_HBACmd": 0,
-      "CF_VSM_Warn": 0,
-      "CF_VSM_Stat": 0,
-      "CF_VSM_BeltCmd": 0,
-      "ACCFailInfo": 0,
-      "ACCMode": enabled,
-      "StopReq": 0,
-      "CR_VSM_DecCmd": 0,
-      "aReqMax": apply_accel+3.0 if enabled else 0,
-      "TakeOverReq": 0,
-      "PreFill": 0,
-      "aReqMin": apply_accel+3.0 if enabled else -10.23,
-      "CF_VSM_ConfMode": 0,
-      "AEB_Failinfo": 0,
-      "AEB_Status": 0,
-      "AEB_CmdAct": 0,
-      "AEB_StopReq": 0,
-      "CR_VSM_Alive": cnt,
-      "CR_VSM_ChkSum": 0,
-    }
-  else:
+  # if sccEmulation:
+  #   values = {
+  #     "CF_VSM_Prefill": 0,
+  #     "CF_VSM_DecCmdAct": 0,
+  #     "CF_VSM_HBACmd": 0,
+  #     "CF_VSM_Warn": 0,
+  #     "CF_VSM_Stat": 0,
+  #     "CF_VSM_BeltCmd": 0,
+  #     "ACCFailInfo": 0,
+  #     "ACCMode": enabled,
+  #     "StopReq": 0,
+  #     "CR_VSM_DecCmd": 0,
+  #     "aReqMax": apply_accel+3.0 if enabled else 0,
+  #     "TakeOverReq": 0,
+  #     "PreFill": 0,
+  #     "aReqMin": apply_accel+3.0 if enabled else -10.23,
+  #     "CF_VSM_ConfMode": 0,
+  #     "AEB_Failinfo": 0,
+  #     "AEB_Status": 0,
+  #     "AEB_CmdAct": 0,
+  #     "AEB_StopReq": 0,
+  #     "CR_VSM_Alive": cnt,
+  #     "CR_VSM_ChkSum": 0,
+  #   }
+  # else:
     values = {
       "CF_VSM_Prefill": scc12["CF_VSM_Prefill"],
       "CF_VSM_DecCmdAct": scc12["CF_VSM_DecCmdAct"],
