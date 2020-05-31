@@ -56,7 +56,7 @@ class RadarInterface(RadarInterfaceBase):
     cpt = self.rcp.vl
     errors = []
     if not self.rcp.can_valid:
-      print("canError")
+      print("canError!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
       errors.append("canError")
     ret.errors = errors
 
