@@ -369,11 +369,7 @@ class CarInterface(CarInterfaceBase):
     ret.lcaRight = self.CS.lca_right != 0
 
     # Optima only has blinker flash signal
-<<<<<<< HEAD
-    #if self.CP.carFingerprint in [CAR.KIA_O7PTIMA, CAR.KIA_OPTIMA_H]:
-=======
     #if self.CP.carFingerprint in [CAR.KIA_OPTIMA, CAR.KIA_OPTIMA_H]:
->>>>>>> dbc57d2e42bedab9e3467a4071c83d345883cd94
     #  self.CS.left_blinker_on = self.CS.left_blinker_flash or self.CS.prev_left_blinker_on and self.CC.turning_signal_timer
     #  self.CS.right_blinker_on = self.CS.right_blinker_flash or self.CS.prev_right_blinker_on and self.CC.turning_signal_timer
 
