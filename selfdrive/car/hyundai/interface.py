@@ -414,26 +414,35 @@ class CarInterface(CarInterfaceBase):
 
     events = []
     if not ret.gearShifter == GearShifter.drive:
+      print("wrongGear, NO_ENTRY, USER_DISABLE")
       events.append(create_event('wrongGear', [ET.NO_ENTRY, ET.USER_DISABLE]))
     if ret.doorOpen:
+      print("doorOpen, NO_ENTRY, SOFT_DISABLE")
       events.append(create_event('doorOpen', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
     if ret.seatbeltUnlatched:
+      print("seatbeltNotLatched, NO_ENTRY, SOFT_DISABLE")
       events.append(create_event('seatbeltNotLatched', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
     if self.CS.esp_disabled:
+      print("espDisabled, NO_ENTRY, SOFT_DISABLE")
       events.append(create_event('espDisabled', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
     if not self.CS.main_on:
+      print("wrongCarMode, NO_ENTRY, USER_DISABLE")
       events.append(create_event('wrongCarMode', [ET.NO_ENTRY, ET.USER_DISABLE]))
     if ret.gearShifter == GearShifter.reverse:
+      print("reverseGear, NO_ENTRY, USER_DISABLE")
       events.append(create_event('reverseGear', [ET.NO_ENTRY, ET.USER_DISABLE]))
     if self.CS.steer_error or abs(self.CS.angle_steers) > 90.:
+      print("steerTempUnavailable, NO_ENTRY, WARNING")
       events.append(create_event('steerTempUnavailable', [ET.NO_ENTRY, ET.WARNING]))
 
     if ret.cruiseState.enabled and not self.cruise_enabled_prev:
+      print("pcmEnable, ENABLE")
       events.append(create_event('pcmEnable', [ET.ENABLE]))
     #자동 재활성 테스트
     #elif ret.cruiseState.enable and ret.gearShifter == GearShifter.drive and self.CS.clu_Vanz > 5:
     #  events.append(create_event('pcmEnable', [ET.ENABLE]))
     elif not ret.cruiseState.enabled:
+      print("pcmDisable, USER_DISABLE")
       events.append(create_event('pcmDisable', [ET.USER_DISABLE]))
 
     
@@ -443,21 +452,27 @@ class CarInterface(CarInterfaceBase):
     # disable on pedals rising edge or when brake is pressed and speed isn't zero
     if ((ret.gasPressed and not self.gas_pressed_prev) or \
       (ret.brakePressed and (not self.brake_pressed_prev or ret.vEgoRaw > 0.1))) and self.CC.longcontrol:
+      print("pedalPressed, NO_ENTRY, USER_DISABLE")
       events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
 
     if ret.gasPressed and self.CC.longcontrol:
+      print("pedalPressed, PRE_ENABLE")
       events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
 
     if self.low_speed_alert and not self.CS.mdps_bus :
+      print("belowSteerSpeed, WARNING")
       events.append(create_event('belowSteerSpeed', [ET.WARNING]))
     if self.turning_indicator_alert:
+      print("turningIndicatorOn, WARNING")
       events.append(create_event('turningIndicatorOn', [ET.WARNING]))
 #    if self.lkas_button_alert:
 #      events.append(create_event('lkasButtonOff', [ET.WARNING]))
     #TODO Varible for min Speed for LCA
     if ret.rightBlinker and ret.lcaRight and self.CS.v_ego > (60 * CV.KPH_TO_MS):
+      print("rightLCAbsm, WARNING")
       events.append(create_event('rightLCAbsm', [ET.WARNING]))
     if ret.leftBlinker and ret.lcaLeft and self.CS.v_ego > (60 * CV.KPH_TO_MS):
+      print("leftLCAbsm, WARNING")
       events.append(create_event('leftLCAbsm', [ET.WARNING]))
 
     ret.events = events
