@@ -430,8 +430,15 @@ class CarInterface(CarInterfaceBase):
 
     if ret.cruiseState.enabled and not self.cruise_enabled_prev:
       events.append(create_event('pcmEnable', [ET.ENABLE]))
+    #자동 재활성 테스트
+    elif ret.cruiseState.enable and ret.gearShifter == GearShifter.drive and self.CS.clu_Vanz > 5:
+      events.append(create_event('pcmEnable', [ET.ENABLE]))
     elif not ret.cruiseState.enabled:
       events.append(create_event('pcmDisable', [ET.USER_DISABLE]))
+
+    
+    
+
 
     # disable on pedals rising edge or when brake is pressed and speed isn't zero
     if ((ret.gasPressed and not self.gas_pressed_prev) or \
