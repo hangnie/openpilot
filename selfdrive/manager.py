@@ -224,6 +224,7 @@ if ANDROID:
     'logcatd',
     'tombstoned',
     'updated',
+    'shutdownd',
   ]
 
 car_started_processes = [
