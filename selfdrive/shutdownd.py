@@ -33,6 +33,7 @@ def main(gctx=None):
     else:
       shutdown_count = 0
 
+    print('shudown count', shutdown_count)
     if auto_shutdown_at is None:
       auto_shutdown_at = get_shutdown_val()
     else:
