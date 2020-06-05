@@ -127,7 +127,7 @@ def create_scc11(packer, enabled, count, sccEmulation, scc11):
     "Navi_SCC_Camera_Act": 0,
     "Navi_SCC_Camera_Status": 0,
     "ACC_ObjStatus": 0,
-    "ACC_ObjDist": scc11["ACC_ObjDist"],
+    "ACC_ObjDist": 150, #scc11["ACC_ObjDist"],
     "ACC_ObjLatPos":0,
     "ACC_ObjRelSpd":0,
   }
