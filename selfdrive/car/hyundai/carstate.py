@@ -357,9 +357,11 @@ class CarState():
     self.low_speed_lockout = self.v_ego_raw < 1.0
 
     self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
+    print("self.is_set_speed_in_mph:" + str(self.is_set_speed_in_mph))
     speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
     self.cruise_set_speed = cp_scc.vl["SCC11"]['VSetDis'] * speed_conv if not self.no_radar else \
                                          (cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv)
+    print("self.cruise_set_speed:" + str(self.cruise_set_speed))
     self.standstill = not self.v_ego_raw > 0.1
 
     self.angle_steers = cp_sas.vl["SAS11"]['SAS_Angle']
