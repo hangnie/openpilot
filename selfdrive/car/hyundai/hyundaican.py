@@ -119,7 +119,7 @@ def create_scc11(packer, enabled, count, sccEmulation, scc11):
     "SCCInfoDisplay": scc11["SCCInfoDisplay"], #0,
     "AliveCounterACC": count,
     "VSetDis": 30, #scc11["VSetDis"], #0,  # km/h velosity
-    "ObjValid": 0,
+    "ObjValid": 1,
     "DriverAlertDisplay": 0,
     "TauGapSet": 4, #scc11["TauGapSet"],
     "Navi_SCC_Curve_Status": 0,
