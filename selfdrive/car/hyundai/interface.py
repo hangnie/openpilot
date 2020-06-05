@@ -430,7 +430,7 @@ class CarInterface(CarInterfaceBase):
 
     if ret.cruiseState.enabled and not self.cruise_enabled_prev:
       events.append(create_event('pcmEnable', [ET.ENABLE]))
-    elif ret.cruiseState.enable and ret.gearShifter == GearShifter.drive and self.CS.clu_Vanz > 15:
+    elif ret.cruiseState.enabled and ret.gearShifter == GearShifter.drive and self.CS.clu_Vanz > 15:
       print("vEgo:"+str(ret.vEgo) + "/vEgoRaw:" + str(ret.vEgoRaw))
       events.append(create_event('pcmEnable', [ET.ENABLE]))
     elif not ret.cruiseState.enabled:
