@@ -115,19 +115,19 @@ def create_scc11(packer, enabled, count, sccEmulation, scc11):
   #   }
   # else: 
   values = {
-    "MainMode_ACC": 1, #scc11["MainMode_ACC"], #0,
-    "SCCInfoDisplay": 0,
+    "MainMode_ACC": scc11["MainMode_ACC"], #0,
+    "SCCInfoDisplay": scc11["SCCInfoDisplay"], #0,
     "AliveCounterACC": count,
-    "VSetDis": 30, #scc11["VSetDis"], #0,  # km/h velosity
-    "ObjValid": 1,
+    "VSetDis": scc11["VSetDis"], #0,  # km/h velosity
+    "ObjValid": 0,
     "DriverAlertDisplay": 0,
-    "TauGapSet": 1, #scc11["TauGapSet"],
+    "TauGapSet": scc11["TauGapSet"],
     "Navi_SCC_Curve_Status": 0,
     "Navi_SCC_Curve_Act": 0,
     "Navi_SCC_Camera_Act": 0,
     "Navi_SCC_Camera_Status": 0,
-    "ACC_ObjStatus": 1,
-    "ACC_ObjDist": 150, #scc11["ACC_ObjDist"],
+    "ACC_ObjStatus": 0,
+    "ACC_ObjDist": scc11["ACC_ObjDist"],
     "ACC_ObjLatPos":0,
     "ACC_ObjRelSpd":0,
   }
@@ -170,13 +170,13 @@ def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
     "CF_VSM_Stat": scc12["CF_VSM_Stat"],
     "CF_VSM_BeltCmd": scc12["CF_VSM_BeltCmd"],
     "ACCFailInfo": scc12["ACCFailInfo"],
-    "ACCMode": 1, #scc12["ACCMode"],
+    "ACCMode": scc12["ACCMode"],
     "StopReq": scc12["StopReq"],
     "CR_VSM_DecCmd": scc12["CR_VSM_DecCmd"],
-    "aReqMax": apply_accel, # if enabled and scc12["ACCMode"] == 1 else scc12["aReqMax"],
+    "aReqMax": scc12["aReqMax"], #apply_accel, # if enabled and scc12["ACCMode"] == 1 else scc12["aReqMax"],
     "TakeOverReq": scc12["TakeOverReq"],
     "PreFill": scc12["PreFill"],
-    "aReqMin": apply_accel, # if enabled and scc12["ACCMode"] == 1 else scc12["aReqMin"],
+    "aReqMin": scc12["aReqMin"], #apply_accel, # if enabled and scc12["ACCMode"] == 1 else scc12["aReqMin"],
     "CF_VSM_ConfMode": scc12["CF_VSM_ConfMode"],
     "AEB_Failinfo": scc12["AEB_Failinfo"],
     "AEB_Status": scc12["AEB_Status"],
