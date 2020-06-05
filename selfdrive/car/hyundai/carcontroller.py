@@ -195,7 +195,7 @@ class CarController():
     
     ## TEST LeadDistance
     print("last_lead_distance : " + str(self.last_lead_distance), end=' ')
-    print("CS.lead_distance : " + str(CS.lead_distance), end=' ')
+    print("CS.lead_distance : " + str(CS.lead_distance))
 
     if CS.stopped:
       # run only first time when the car stopped
