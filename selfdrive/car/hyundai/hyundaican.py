@@ -115,7 +115,7 @@ def create_scc11(packer, enabled, count, sccEmulation, scc11):
   #   }
   # else: 
   values = {
-    "MainMode_ACC": scc11["MainMode_ACC"], #0,
+    "MainMode_ACC": 1, #scc11["MainMode_ACC"], #0,
     "SCCInfoDisplay": scc11["SCCInfoDisplay"], #0,
     "AliveCounterACC": count,
     "VSetDis": scc11["VSetDis"], #0,  # km/h velosity
@@ -170,7 +170,7 @@ def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
     "CF_VSM_Stat": scc12["CF_VSM_Stat"],
     "CF_VSM_BeltCmd": scc12["CF_VSM_BeltCmd"],
     "ACCFailInfo": scc12["ACCFailInfo"],
-    "ACCMode": scc12["ACCMode"],
+    "ACCMode": 1, #scc12["ACCMode"],
     "StopReq": scc12["StopReq"],
     "CR_VSM_DecCmd": scc12["CR_VSM_DecCmd"],
     "aReqMax": scc12["aReqMax"], #apply_accel, # if enabled and scc12["ACCMode"] == 1 else scc12["aReqMax"],
