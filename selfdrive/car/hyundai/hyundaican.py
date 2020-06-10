@@ -94,6 +94,46 @@ def create_clu11(packer, bus, clu11, button, speed, cnt):
   }
 
   return packer.make_can_msg("CLU11", bus, values)
+<<<<<<< HEAD
+=======
+def create_scc11(packer, enabled, count, sccEmulation, scc11):
+  # if sccEmulation:
+  #   values = {
+  #     "MainMode_ACC": 1,
+  #     "SCCInfoDisplay": 0,
+  #     "AliveCounterACC": count,
+  #     "VSetDis": 0,  # km/h velosity
+  #     "ObjValid": 0,
+  #     "DriverAlertDisplay": 0,
+  #     "TauGapSet": 4,
+  #     "Navi_SCC_Curve_Status": 0,
+  #     "Navi_SCC_Curve_Act": 0,
+  #     "Navi_SCC_Camera_Act": 0,
+  #     "Navi_SCC_Camera_Status": 0,
+  #     "ACC_ObjStatus": 0,
+  #     "ACC_ObjDist": 150,
+  #     "ACC_ObjLatPos":0,
+  #     "ACC_ObjRelSpd":0,
+  #   }
+  # else: 
+  values = {
+    "MainMode_ACC": 1, #scc11["MainMode_ACC"], #0,
+    "SCCInfoDisplay": 0, #scc11["SCCInfoDisplay"], #0,
+    "AliveCounterACC": count,
+    "VSetDis": 9.7, #scc11["VSetDis"], #0,  # km/h velosity
+    "ObjValid": 1,
+    "DriverAlertDisplay": 0,
+    "TauGapSet": 4, #scc11["TauGapSet"],
+    "Navi_SCC_Curve_Status": 0,
+    "Navi_SCC_Curve_Act": 0,
+    "Navi_SCC_Camera_Act": 0,
+    "Navi_SCC_Camera_Status": 0,
+    "ACC_ObjStatus": 1,
+    "ACC_ObjDist": 150, #scc11["ACC_ObjDist"],
+    "ACC_ObjLatPos":0,
+    "ACC_ObjRelSpd":0,
+  }
+>>>>>>> 3b0189d2a3e43374de226deb576ae49d8bcc69ac
 
 def create_scc12(packer, apply_accel, enabled, cnt, scc12):
   values = {
@@ -107,10 +147,10 @@ def create_scc12(packer, apply_accel, enabled, cnt, scc12):
     "ACCMode": scc12["ACCMode"],
     "StopReq": scc12["StopReq"],
     "CR_VSM_DecCmd": scc12["CR_VSM_DecCmd"],
-    "aReqMax": apply_accel if enabled and scc12["ACCMode"] == 1 else scc12["aReqMax"],
+    "aReqMax": apply_accel, # if enabled and scc12["ACCMode"] == 1 else scc12["aReqMax"],
     "TakeOverReq": scc12["TakeOverReq"],
     "PreFill": scc12["PreFill"],
-    "aReqMin": apply_accel if enabled and scc12["ACCMode"] == 1 else scc12["aReqMin"],
+    "aReqMin": apply_accel, # if enabled and scc12["ACCMode"] == 1 else scc12["aReqMin"],
     "CF_VSM_ConfMode": scc12["CF_VSM_ConfMode"],
     "AEB_Failinfo": scc12["AEB_Failinfo"],
     "AEB_Status": scc12["AEB_Status"],

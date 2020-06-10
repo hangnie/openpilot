@@ -46,6 +46,7 @@ class Buttons:
   NONE = 0
   RES_ACCEL = 1
   SET_DECEL = 2
+  ACC_CRUISE = 3
   CANCEL = 4
 
 FINGERPRINTS = {
