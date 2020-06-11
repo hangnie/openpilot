@@ -193,6 +193,14 @@ def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
 
   return packer.make_can_msg("SCC12", 0, values)
 
+def create_scc13(packer):
+  values = {
+    "SCCDrvModeRValue" : 2,
+    "SCC_Equip" : 1,
+    "AebDrvSetStatus" : 0,
+  }
+  return packer.make_can_msg("SCC13", 0, values)
+
 def create_mdps12(packer, car_fingerprint, cnt, mdps12):
   values = {
     "CR_Mdps_StrColTq": mdps12["CR_Mdps_StrColTq"],
