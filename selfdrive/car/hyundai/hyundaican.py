@@ -94,10 +94,6 @@ def create_clu11(packer, bus, clu11, button, speed, cnt):
   }
 
   return packer.make_can_msg("CLU11", bus, values)
-<<<<<<< HEAD
-
-def create_scc12(packer, apply_accel, enabled, cnt, scc12):
-=======
 def create_scc11(packer, enabled, count, sccEmulation, scc11):
   # if sccEmulation:
   #   values = {
@@ -168,7 +164,6 @@ def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
   #     "CR_VSM_ChkSum": 0,
   #   }
   # else:
->>>>>>> 527aba2723e9bc395f19640b34c4a9aab74df8f5
   values = {
     "CF_VSM_Prefill": scc12["CF_VSM_Prefill"],
     "CF_VSM_DecCmdAct": scc12["CF_VSM_DecCmdAct"],
