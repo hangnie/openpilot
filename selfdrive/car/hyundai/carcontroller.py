@@ -177,6 +177,13 @@ class CarController():
     
     #TUCSON SCC Emulation TEST
     if self.car_fingerprint == CAR.TUCSON_TL:
+      if CS.clu11["CF_Clu_Vanz"] < 15 and CS.clu11["CF_Clu_CruiseSwState"] == 2 and not self.acc_cruise_state:
+        #차간거리 버튼 누름
+        can_sends.append(create_clu11(self.packer, CS.scc_bus, CS.clu11, Buttons.ACC_CRUISE, clu11_speed, self.clu11_cnt))
+        self.acc_cruise_state= 1
+
+      if CS.clu11["CF_Clu_Vanz"] < 15 and CS.clu11["CF_Clu_CruiseSwState"] == 2 and not self.acc_cruise_state:
+          self.acc_cruise_state = 0
 
       
       #50 message per second
