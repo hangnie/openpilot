@@ -208,12 +208,6 @@ class CarController():
       if CS.scc_bus and self.longcontrol and frame % 2: # send scc12 to car if SCC not on bus 0 and longcontrol enabled
         can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, sefl.sccEmulation, CS.scc12))
         self.scc12_cnt += 1
-    
-    
-    
-    ## TEST LeadDistance
-    print("last_lead_distance : " + str(self.last_lead_distance), end=' ')
-    print("CS.lead_distance : " + str(CS.lead_distance))
 
     if CS.stopped:
       # run only first time when the car stopped
