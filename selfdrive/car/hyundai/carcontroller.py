@@ -72,6 +72,7 @@ class CarController():
     self.lkas_button = 1
     self.lkas_button_last = 0
     self.longcontrol = 1 #TODO: make auto
+    self.acc_cruise_state = 0 
     
     self.sccEmulation = 0 #car_fingerprint in FEATURES["use_scc_emulation"]
 
