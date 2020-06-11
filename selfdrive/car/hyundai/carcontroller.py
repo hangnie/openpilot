@@ -182,7 +182,7 @@ class CarController():
         can_sends.append(create_clu11(self.packer, CS.scc_bus, CS.clu11, Buttons.ACC_CRUISE, clu11_speed, self.clu11_cnt))
         self.acc_cruise_state= 1
 
-      if CS.clu11["CF_Clu_Vanz"] < 15 and CS.clu11["CF_Clu_CruiseSwState"] == 2 and not self.acc_cruise_state:
+      if CS.clu11["CF_Clu_Vanz"] < 15 and CS.clu11["CF_Clu_CruiseSwState"] == 1 and not self.acc_cruise_state:
           self.acc_cruise_state = 0
 
       
