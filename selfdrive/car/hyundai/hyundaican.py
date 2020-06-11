@@ -133,6 +133,8 @@ def create_scc11(packer, enabled, count, sccEmulation, scc11):
   }
 
   
+
+  
   return packer.make_can_msg("SCC11", 0, values)
 
 

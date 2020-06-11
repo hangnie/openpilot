@@ -74,7 +74,7 @@ class CarController():
     self.longcontrol = 1 #TODO: make auto
     self.acc_cruise_state = 0 
     
-    self.sccEmulation = 0 #car_fingerprint in FEATURES["use_scc_emulation"]
+    self.sccEmulation = 1 #car_fingerprint in FEATURES["use_scc_emulation"]
 
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
