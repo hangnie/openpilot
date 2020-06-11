@@ -94,8 +94,81 @@ def create_clu11(packer, bus, clu11, button, speed, cnt):
   }
 
   return packer.make_can_msg("CLU11", bus, values)
+<<<<<<< HEAD
 
 def create_scc12(packer, apply_accel, enabled, cnt, scc12):
+=======
+def create_scc11(packer, enabled, count, sccEmulation, scc11):
+  # if sccEmulation:
+  #   values = {
+  #     "MainMode_ACC": 1,
+  #     "SCCInfoDisplay": 0,
+  #     "AliveCounterACC": count,
+  #     "VSetDis": 0,  # km/h velosity
+  #     "ObjValid": 0,
+  #     "DriverAlertDisplay": 0,
+  #     "TauGapSet": 4,
+  #     "Navi_SCC_Curve_Status": 0,
+  #     "Navi_SCC_Curve_Act": 0,
+  #     "Navi_SCC_Camera_Act": 0,
+  #     "Navi_SCC_Camera_Status": 0,
+  #     "ACC_ObjStatus": 0,
+  #     "ACC_ObjDist": 150,
+  #     "ACC_ObjLatPos":0,
+  #     "ACC_ObjRelSpd":0,
+  #   }
+  # else: 
+  values = {
+    "MainMode_ACC": 1, #scc11["MainMode_ACC"], #0,
+    "SCCInfoDisplay": 0, #scc11["SCCInfoDisplay"], #0,
+    "AliveCounterACC": count,
+    "VSetDis": 9.7, #scc11["VSetDis"], #0,  # km/h velosity
+    "ObjValid": 1,
+    "DriverAlertDisplay": 0,
+    "TauGapSet": 4, #scc11["TauGapSet"],
+    "Navi_SCC_Curve_Status": 0,
+    "Navi_SCC_Curve_Act": 0,
+    "Navi_SCC_Camera_Act": 0,
+    "Navi_SCC_Camera_Status": 0,
+    "ACC_ObjStatus": 1,
+    "ACC_ObjDist": 150, #scc11["ACC_ObjDist"],
+    "ACC_ObjLatPos":0,
+    "ACC_ObjRelSpd":0,
+  }
+
+  
+
+  
+  return packer.make_can_msg("SCC11", 0, values)
+
+
+def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
+  # if sccEmulation:
+  #   values = {
+  #     "CF_VSM_Prefill": 0,
+  #     "CF_VSM_DecCmdAct": 0,
+  #     "CF_VSM_HBACmd": 0,
+  #     "CF_VSM_Warn": 0,
+  #     "CF_VSM_Stat": 0,
+  #     "CF_VSM_BeltCmd": 0,
+  #     "ACCFailInfo": 0,
+  #     "ACCMode": enabled,
+  #     "StopReq": 0,
+  #     "CR_VSM_DecCmd": 0,
+  #     "aReqMax": apply_accel+3.0 if enabled else 0,
+  #     "TakeOverReq": 0,
+  #     "PreFill": 0,
+  #     "aReqMin": apply_accel+3.0 if enabled else -10.23,
+  #     "CF_VSM_ConfMode": 0,
+  #     "AEB_Failinfo": 0,
+  #     "AEB_Status": 0,
+  #     "AEB_CmdAct": 0,
+  #     "AEB_StopReq": 0,
+  #     "CR_VSM_Alive": cnt,
+  #     "CR_VSM_ChkSum": 0,
+  #   }
+  # else:
+>>>>>>> 527aba2723e9bc395f19640b34c4a9aab74df8f5
   values = {
     "CF_VSM_Prefill": scc12["CF_VSM_Prefill"],
     "CF_VSM_DecCmdAct": scc12["CF_VSM_DecCmdAct"],
@@ -107,10 +180,10 @@ def create_scc12(packer, apply_accel, enabled, cnt, scc12):
     "ACCMode": scc12["ACCMode"],
     "StopReq": scc12["StopReq"],
     "CR_VSM_DecCmd": scc12["CR_VSM_DecCmd"],
-    "aReqMax": apply_accel if enabled and scc12["ACCMode"] == 1 else scc12["aReqMax"],
+    "aReqMax": apply_accel, # if enabled and scc12["ACCMode"] == 1 else scc12["aReqMax"],
     "TakeOverReq": scc12["TakeOverReq"],
     "PreFill": scc12["PreFill"],
-    "aReqMin": apply_accel if enabled and scc12["ACCMode"] == 1 else scc12["aReqMin"],
+    "aReqMin": apply_accel, # if enabled and scc12["ACCMode"] == 1 else scc12["aReqMin"],
     "CF_VSM_ConfMode": scc12["CF_VSM_ConfMode"],
     "AEB_Failinfo": scc12["AEB_Failinfo"],
     "AEB_Status": scc12["AEB_Status"],

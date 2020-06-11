@@ -71,7 +71,11 @@ class CarController():
     self.turning_signal_timer = 0
     self.lkas_button = 1
     self.lkas_button_last = 0
-    self.longcontrol = 0 #TODO: make auto
+    self.longcontrol = 1 #TODO: make auto
+    self.acc_cruise_state = 0 
+    
+    self.sccEmulation = 1 #car_fingerprint in FEATURES["use_scc_emulation"]
+
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
               left_line, right_line, left_lane_depart, right_lane_depart):
@@ -141,7 +145,14 @@ class CarController():
       self.scc12_cnt = CS.scc12["CR_VSM_Alive"] + 1 if not CS.no_radar else 0
 
     self.lkas11_cnt %= 0x10
+    #self.scc11_cnt %= 16
+    self.scc11_cnt = frame % 0x10
+
     self.scc12_cnt %= 0xF
+
+    
+
+    
     self.clu11_cnt = frame % 0x10
     self.mdps12_cnt = frame % 0x100
 
@@ -154,13 +165,43 @@ class CarController():
       can_sends.append(create_clu11(self.packer, CS.mdps_bus, CS.clu11, Buttons.NONE, enabled_speed, self.clu11_cnt))
 
     if pcm_cancel_cmd and self.longcontrol:
+      print("clu", end=' ')
       can_sends.append(create_clu11(self.packer, CS.scc_bus, CS.clu11, Buttons.CANCEL, clu11_speed, self.clu11_cnt))
     else: # send mdps12 to LKAS to prevent LKAS error if no cancel cmd
       can_sends.append(create_mdps12(self.packer, self.car_fingerprint, self.mdps12_cnt, CS.mdps12))
+    
+    #TUCSON SCC Emulation TEST
+    if self.car_fingerprint == CAR.TUCSON_TL:
+      if CS.clu11["CF_Clu_Vanz"] < 15 and CS.clu11["CF_Clu_CruiseSwState"] == 2 and not self.acc_cruise_state:
+        #차간거리 버튼 누름
+        can_sends.append(create_clu11(self.packer, CS.scc_bus, CS.clu11, Buttons.ACC_CRUISE, clu11_speed, self.clu11_cnt))
+        self.acc_cruise_state = 1
+      if CS.clu11["CF_Clu_Vanz"] < 15 and CS.clu11["CF_Clu_CruiseSwState"] == 1 and not self.acc_cruise_state:  
+        self.acc_cruise_state = 0
 
-    if CS.scc_bus and self.longcontrol and frame % 2: # send scc12 to car if SCC not on bus 0 and longcontrol enabled
-      can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, CS.scc12))
-      self.scc12_cnt += 1
+      
+      #50 message per second
+      if not (frame % 2):
+        print("11", end=' ')
+        can_sends.append(create_scc11(self.packer, enabled, self.scc11_cnt, self.sccEmulation, CS.scc11))
+        self.scc11_cnt += 1
+        self.scc12_cnt += 1
+        print("12", end=' ')
+        can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, self.sccEmulation, CS.scc12))  # send scc12 to car if scc emulation is enabled or
+
+      
+      #25 Messages per second
+      #if not (frame % 4):
+        #can_sends.append(create_fca11(self.packer, self.fca11_cnt ))
+      #  self.fca11_cnt +=1
+      # 5 message per second
+      if not (frame % 20):
+        print("13", end=' ')
+        can_sends.append(create_scc13(self.packer, self.sccEmulation))
+    else:
+      if CS.scc_bus and self.longcontrol and frame % 2: # send scc12 to car if SCC not on bus 0 and longcontrol enabled
+        can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, sefl.sccEmulation, CS.scc12))
+        self.scc12_cnt += 1
 
     if CS.stopped:
       # run only first time when the car stopped
