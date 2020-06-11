@@ -425,10 +425,13 @@ class CarInterface(CarInterfaceBase):
       events.append(create_event('wrongCarMode', [ET.NO_ENTRY, ET.USER_DISABLE]))
     if ret.gearShifter == GearShifter.reverse:
       events.append(create_event('reverseGear', [ET.NO_ENTRY, ET.USER_DISABLE]))
-    if self.CS.steer_error or abs(self.CS.angle_steers) > 90.:
+    if self.CS.steer_error or abs(self.CS.angle_steers) > 145.:
       events.append(create_event('steerTempUnavailable', [ET.NO_ENTRY, ET.WARNING]))
 
     if ret.cruiseState.enabled and not self.cruise_enabled_prev:
+      events.append(create_event('pcmEnable', [ET.ENABLE]))
+    elif ret.cruiseState.enabled and ret.gearShifter == GearShifter.drive and self.CS.clu_Vanz > 15:
+      #print("vEgo:"+str(ret.vEgo) + "/vEgoRaw:" + str(ret.vEgoRaw))
       events.append(create_event('pcmEnable', [ET.ENABLE]))
     elif not ret.cruiseState.enabled:
       events.append(create_event('pcmDisable', [ET.USER_DISABLE]))

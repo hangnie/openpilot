@@ -334,7 +334,7 @@ def thermald_thread():
     now = datetime.datetime.utcnow()
 
     # show invalid date/time alert
-    time_valid = now.year >= 2019
+    time_valid = True # now.year >= 2019
     if time_valid and not time_valid_prev:
       params.delete("Offroad_InvalidTime")
     if not time_valid and time_valid_prev:

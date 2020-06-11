@@ -2,7 +2,7 @@ from cereal import car
 from common.numpy_fast import clip
 from selfdrive.car import apply_std_steer_torque_limits
 from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, \
-                                             create_scc11, create_scc12, create_scc13, create_mdps12, create_lfa_mfa
+                                             create_scc12, create_mdps12, create_lfa_mfa
 from selfdrive.car.hyundai.values import Buttons, SteerLimitParams, CAR
 from opendbc.can.packer import CANPacker
 
@@ -142,7 +142,6 @@ class CarController():
     if frame == 0: # initialize counts from last received count signals
       self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"] + 1
       self.scc12_cnt = CS.scc12["CR_VSM_Alive"] + 1 if not CS.no_radar else 0
-      self.scc11_cnt = 0
 
     self.lkas11_cnt %= 0x10
     #self.scc11_cnt %= 16
@@ -155,11 +154,6 @@ class CarController():
     
     self.clu11_cnt = frame % 0x10
     self.mdps12_cnt = frame % 0x100
-    ## TEST Accel
-
-
-    print("apply_accel : " + str(apply_accel), end=' ')
-
 
     can_sends.append(create_lkas11(self.packer, self.car_fingerprint, 0, apply_steer, steer_req, self.lkas11_cnt, lkas_active,
                                    CS.lkas11, hud_alert, lane_visible, left_lane_depart, right_lane_depart, keep_stock=True))

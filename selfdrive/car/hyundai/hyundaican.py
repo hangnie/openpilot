@@ -94,6 +94,10 @@ def create_clu11(packer, bus, clu11, button, speed, cnt):
   }
 
   return packer.make_can_msg("CLU11", bus, values)
+<<<<<<< HEAD
+
+def create_scc12(packer, apply_accel, enabled, cnt, scc12):
+=======
 def create_scc11(packer, enabled, count, sccEmulation, scc11):
   # if sccEmulation:
   #   values = {
@@ -164,6 +168,7 @@ def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
   #     "CR_VSM_ChkSum": 0,
   #   }
   # else:
+>>>>>>> 527aba2723e9bc395f19640b34c4a9aab74df8f5
   values = {
     "CF_VSM_Prefill": scc12["CF_VSM_Prefill"],
     "CF_VSM_DecCmdAct": scc12["CF_VSM_DecCmdAct"],
@@ -172,7 +177,7 @@ def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
     "CF_VSM_Stat": scc12["CF_VSM_Stat"],
     "CF_VSM_BeltCmd": scc12["CF_VSM_BeltCmd"],
     "ACCFailInfo": scc12["ACCFailInfo"],
-    "ACCMode": 1, #scc12["ACCMode"],
+    "ACCMode": scc12["ACCMode"],
     "StopReq": scc12["StopReq"],
     "CR_VSM_DecCmd": scc12["CR_VSM_DecCmd"],
     "aReqMax": apply_accel, # if enabled and scc12["ACCMode"] == 1 else scc12["aReqMax"],
@@ -187,21 +192,11 @@ def create_scc12(packer, apply_accel, enabled, cnt, sccEmulation, scc12):
     "CR_VSM_Alive": cnt,
     "CR_VSM_ChkSum": 0,
   }
+
   dat = packer.make_can_msg("SCC12", 0, values)[2]
   values["CR_VSM_ChkSum"] = 16 - sum([sum(divmod(i, 16)) for i in dat]) % 16
 
   return packer.make_can_msg("SCC12", 0, values)
-
-def create_scc13(packer, sccEmulation):
-  values = {
-    "SCCDrvModeRValue" : 2,
-    "SCC_Equip" : 1,
-    "AebDrvSetStatus" : 0,
-  }
-  return packer.make_can_msg("SCC13", 0, values)
-
-
-
 
 def create_mdps12(packer, car_fingerprint, cnt, mdps12):
   values = {

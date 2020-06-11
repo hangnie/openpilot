@@ -216,6 +216,7 @@ persistent_processes = [
   'logmessaged',
   'ui',
   'uploader',
+  'shutdownd',
 ]
 
 if ANDROID:
