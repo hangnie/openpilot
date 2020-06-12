@@ -358,8 +358,24 @@ class CarState():
 
     self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
     speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
-    self.cruise_set_speed = cp_scc.vl["SCC11"]['VSetDis'] * speed_conv if not self.no_radar else \
-                                         (cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv)
+    self.cruise_set_speed = 0 # cp_scc.vl["SCC11"]['VSetDis'] * speed_conv if not self.no_radar else \
+                              #           (cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv)
+
+
+    if cp.vl['EMS16']['CRUISE_LAMP_M']:
+      if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2 and self.cruise_set_speed == 0:
+        self.cruise_set_speed = self.clu_Vanz * speed_conv
+    
+      if not self.cruise_set_speed:
+        if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2:
+          self.cruise_set_speed -= 2 * speed_conv
+        elif cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 1:
+          self.cruise_set_speed += 2 * speed_conv
+    
+    if cp.vl["TCS13"]['DriverBraking'] or not cp.vl['EMS16']['CRUISE_LAMP_M']:
+      self.cruise_set_speed = 0
+
+
     self.standstill = not self.v_ego_raw > 0.1
 
     self.angle_steers = cp_sas.vl["SAS11"]['SAS_Angle']
