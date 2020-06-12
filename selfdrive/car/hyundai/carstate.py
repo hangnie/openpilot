@@ -304,6 +304,7 @@ class CarState():
     self.mdps_bus = CP.mdpsBus
     self.sas_bus = CP.sasBus
     self.scc_bus = CP.sccBus
+    self.cruise_set_speed = 0
 
     # Q = np.matrix([[10.0, 0.0], [0.0, 100.0]])
     # R = 1e3
@@ -362,14 +363,15 @@ class CarState():
     speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
     
     
-    if cp.vl['EMS16']['CRUISE_LAMP_M'] and cp.vl['CLU11']['CF_Clu_CruiseSwState'] ==2 and self.cruise_set_speed == 0:
-      self.cruise_set_speed = self.clu_Vanz * speed_conv
+    if cp.vl['EMS16']['CRUISE_LAMP_M']:
+      if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2 and self.cruise_set_speed == 0:
+        self.cruise_set_speed = self.clu_Vanz * speed_conv
     
-    if cp.vl['EMS16']['CRUISE_LAMP_M'] and cp.vl['CLU11']['CF_Clu_CruiseSwState'] ==2 and not self.cruise_set_speed:
-      self.cruise_set_speed -= 2 * speed_conv
-      
-    if cp.vl['EMS16']['CRUISE_LAMP_M'] and cp.vl['CLU11']['CF_Clu_CruiseSwState'] ==1 and not self.cruise_set_speed:
-      self.cruise_set_speed += 2 * speed_conv
+      if not self.cruise_set_speed:
+        if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2:
+          self.cruise_set_speed -= 2 * speed_conv
+        elif cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 1:
+          self.cruise_set_speed += 2 * speed_conv
     
     if cp.vl["TCS13"]['DriverBraking'] or not cp.vl['EMS16']['CRUISE_LAMP_M']:
       self.cruise_set_speed = 0
