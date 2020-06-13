@@ -369,7 +369,9 @@ class CarState():
         self.cruise_set_speed = self.clu_Vanz * speed_conv
         
       print("self.cruise_set_speed" + str(self.cruise_set_speed), end= ' ')
-      print("self.speed_conv" + str(speed_conv), end= ' ')
+      print("self.speed_conv" + str(speed_conv), end=' ' )
+      print("self.button_pressed" + str(self.button_pressed), end=' ' )
+      
       if self.cruise_set_speed:
         if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2:
           self.cruise_set_speed -= 2
