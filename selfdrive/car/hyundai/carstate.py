@@ -372,7 +372,7 @@ class CarState():
         if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2:
           if self.cruise_set_speed_prev:
             self.cruise_set_speed = self.cruise_set_speed_prev
-          else
+          else:
             self.cruise_set_speed -= 2 * speed_conv
         elif cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 1:
           self.cruise_set_speed += 2 * speed_conv
