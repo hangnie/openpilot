@@ -432,9 +432,6 @@ class CarInterface(CarInterfaceBase):
             events.append(create_event('pcmDisable', [ET.USER_DISABLE]))
         self.cruise_enabled_prev = ret.cruiseState.enabled
     elif  ret.cruiseState.enabled:
-        if ret.cruiseState.enabled and ret.gearShifter == GearShifter.drive and self.CS.clu_Vanz > 15:
-            events.append(create_event('pcmEnable', [ET.ENABLE]))
-            
         if self.turning_indicator_alert:
           events.append(create_event('turningIndicatorOn', [ET.WARNING]))
         elif self.CC.steer_torque_over:
@@ -447,6 +444,11 @@ class CarInterface(CarInterfaceBase):
         #elif self.low_speed_alert and not self.CS.mdps_bus:
         #  events.append(create_event('belowSteerSpeed', [ET.WARNING]))
 
+    #auto Engageds
+    if ret.cruiseState.enabled and not self.cruise_enabled_prev:
+      if ret.gearShifter == GearShifter.drive and self.CS.clu_Vanz > 15:
+        events.append(create_event('pcmEnable', [ET.ENABLE]))
+            
     # disable on pedals rising edge or when brake is pressed and speed isn't zero
     if self.CC.longcontrol:
       if ((ret.gasPressed and not self.gas_pressed_prev) or (ret.brakePressed and (not self.brake_pressed_prev or ret.vEgoRaw > 0.1))):

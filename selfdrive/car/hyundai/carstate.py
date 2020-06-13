@@ -424,6 +424,24 @@ class CarState():
     if cruise_set_speed_kph < 30:
       cruise_set_speed_kph = 30
 
+    return 
+    
+    def update_cruiseSW2(self, cp, cp2, cp_cam):
+    if cp.vl['EMS16']['CRUISE_LAMP_M']:
+      if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2 and self.cruise_set_speed == 0:
+        self.cruise_set_speed = self.clu_Vanz
+    
+      if not self.cruise_set_speed:
+        if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2:
+          self.cruise_set_speed -= 2
+        elif cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 1:
+          self.cruise_set_speed += 2
+    
+    if cp.vl["TCS13"]['DriverBraking'] or not cp.vl['EMS16']['CRUISE_LAMP_M']:
+      self.cruise_set_speed = 0
+    
+    
+    
     return cruise_set_speed_kph
 
 
@@ -637,7 +655,7 @@ class CarState():
 
 
 
-    self.cruise_set_speed_kph = self.update_cruiseSW()
+    self.cruise_set_speed_kph = self.update_cruiseSW2(cp, cp2, cp_cam)
     self.cruise_set_speed = self.cruise_set_speed_kph * speed_conv
     #str1 = 'C:{:.0f}  as={:.1f} set{:.1f}'.format( self.main_on,  self.pcm_acc_status,  self.cruise_set_speed )
     #str2 = 'sw={:.0f}/{:.0f}/{:.0f} gear={:.0f} scc={:.0f}'.format( self.clu_CruiseSwState, self.clu_CruiseSwMain, self.clu_SldMainSW, self.gear_shifter, self.sccInfoDisp )
