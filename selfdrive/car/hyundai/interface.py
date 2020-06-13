@@ -428,12 +428,13 @@ class CarInterface(CarInterfaceBase):
     if ret.cruiseState.enabled != self.cruise_enabled_prev:
         if ret.cruiseState.enabled:
             events.append(create_event('pcmEnable', [ET.ENABLE]))
-        elif ret.cruiseState.enabled and ret.gearShifter == GearShifter.drive and self.CS.clu_Vanz > 15:
-            events.append(create_event('pcmEnable', [ET.ENABLE]))
         else:
             events.append(create_event('pcmDisable', [ET.USER_DISABLE]))
         self.cruise_enabled_prev = ret.cruiseState.enabled
     elif  ret.cruiseState.enabled:
+        if ret.cruiseState.enabled and ret.gearShifter == GearShifter.drive and self.CS.clu_Vanz > 15:
+            events.append(create_event('pcmEnable', [ET.ENABLE]))
+            
         if self.turning_indicator_alert:
           events.append(create_event('turningIndicatorOn', [ET.WARNING]))
         elif self.CC.steer_torque_over:
