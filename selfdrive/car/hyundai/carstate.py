@@ -305,6 +305,7 @@ class CarState():
     #add
     self.cruise_set_speed_prev = 0
     self.cruise_set_speed = 0
+    self.button_pressed = 0
     # Q = np.matrix([[10.0, 0.0], [0.0, 100.0]])
     # R = 1e3
     self.v_ego_kf = KF1D(x0=[[0.0], [0.0]],
@@ -363,10 +364,10 @@ class CarState():
     #self.cruise_set_speed = cp_scc.vl["SCC11"]['VSetDis'] * speed_conv if not self.no_radar else \
     #                                     (cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv)
     
-    if cp.vl['EMS16']['CRUISE_LAMP_M']:
+    if cp.vl['EMS16']['CRUISE_LAMP_M'] and not self.button_pressed:
       if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2 and self.cruise_set_speed == 0:
         self.cruise_set_speed = 30 #self.clu_Vanz * speed_conv
-    
+        
       print("self.cruise_set_speed" + str(self.cruise_set_speed), end= ' ')
       print("self.speed_conv" + str(speed_conv), end= ' ')
       if self.cruise_set_speed:
@@ -374,7 +375,11 @@ class CarState():
           self.cruise_set_speed -= 2
         elif cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 1:
           self.cruise_set_speed += 2
+      self.button_pressed = 1
     
+    if not cp.vl['CLU11']['CF_Clu_CruiseSwState']:
+      self.button_pressed = 0
+
     if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 4:
     #if cp.vl["TCS13"]['DriverBraking'] or not cp.vl['EMS16']['CRUISE_LAMP_M'] or cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 4:  
       self.cruise_set_speed_prev = self.cruise_set_speed
