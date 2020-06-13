@@ -59,6 +59,9 @@ def get_can_parser(CP):
     ("CF_Lca_Stat", "LCA11", 0),
     ("CF_Lca_IndLeft", "LCA11", 0),
     ("CF_Lca_IndRight", "LCA11", 0),
+
+    #for non-scc car
+    ("CRUISE_LAMP_M", "EMS16", 0),
   ]
 
   checks = [
@@ -332,10 +335,10 @@ class CarState():
     self.esp_disabled = cp.vl["TCS15"]['ESC_Off_Step']
     self.park_brake = cp.vl["CGW1"]['CF_Gway_ParkBrakeSw']
 
-    self.main_on = (cp_scc.vl["SCC11"]["MainMode_ACC"] != 0) if not self.no_radar else \
-                                            cp.vl['EMS16']['CRUISE_LAMP_M']
-    self.acc_active = (cp_scc.vl["SCC12"]['ACCMode'] != 0) if not self.no_radar else \
-                                      (cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0)
+    self.main_on = cp.vl['EMS16']['CRUISE_LAMP_M'] #(cp_scc.vl["SCC11"]["MainMode_ACC"] != 0) if not self.no_radar else \
+                                                   #cp.vl['EMS16']['CRUISE_LAMP_M']
+    self.acc_active = cp.vl['EMS16']['CRUISE_LAMP_M'] #(cp_scc.vl["SCC12"]['ACCMode'] != 0) if not self.no_radar else \
+                                                      #(cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0)
     self.pcm_acc_status = int(self.acc_active)
 
     self.v_wheel_fl = cp.vl["WHL_SPD11"]['WHL_SPD_FL'] * CV.KPH_TO_MS
@@ -352,8 +355,25 @@ class CarState():
 
     self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
     speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
-    self.cruise_set_speed = cp_scc.vl["SCC11"]['VSetDis'] * speed_conv if not self.no_radar else \
-                                         (cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv)
+    
+    #for non-scc car
+    #self.cruise_set_speed = cp_scc.vl["SCC11"]['VSetDis'] * speed_conv if not self.no_radar else \
+    #                                     (cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv)
+    
+    if cp.vl['EMS16']['CRUISE_LAMP_M']:
+      if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2 and self.cruise_set_speed == 0:
+        self.cruise_set_speed = self.clu_Vanz * speed_conv
+    
+      if not self.cruise_set_speed:
+        if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2:
+          self.cruise_set_speed -= 2 * speed_conv
+        elif cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 1:
+          self.cruise_set_speed += 2 * speed_conv
+    
+    if cp.vl["TCS13"]['DriverBraking'] or not cp.vl['EMS16']['CRUISE_LAMP_M'] or cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 4:
+      self.cruise_set_speed = 0
+    
+    
     self.standstill = not self.v_ego_raw > 0.1
 
     self.angle_steers = cp_sas.vl["SAS11"]['SAS_Angle']
