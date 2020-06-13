@@ -427,6 +427,7 @@ class CarState():
     return 
     
   def update_cruiseSW2(self, cp, cp2, cp_cam):
+    cruise_set_speed_kph = self.cruise_set_speed_kph
     if cp.vl['EMS16']['CRUISE_LAMP_M']:
       if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2 and self.cruise_set_speed == 0:
         self.cruise_set_speed = self.clu_Vanz
