@@ -367,12 +367,13 @@ class CarState():
       if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2 and self.cruise_set_speed == 0:
         self.cruise_set_speed = self.clu_Vanz * speed_conv
     
-      print("self.cruise_set_speed" + str(self.cruise_set_speed))
+      print("self.cruise_set_speed" + str(self.cruise_set_speed), end= ' ')
+      print("self.speed_conv" + str(speed_conv), end= ' ')
       if self.cruise_set_speed:
         if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2:
-          self.cruise_set_speed -= 2 * speed_conv
+          self.cruise_set_speed -= 2
         elif cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 1:
-          self.cruise_set_speed += 2 * speed_conv
+          self.cruise_set_speed += 2
     
     if cp.vl["TCS13"]['DriverBraking'] or not cp.vl['EMS16']['CRUISE_LAMP_M'] or cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 4:
       self.cruise_set_speed_prev = self.cruise_set_speed
