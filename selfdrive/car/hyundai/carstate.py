@@ -366,7 +366,7 @@ class CarState():
     
     if cp.vl['EMS16']['CRUISE_LAMP_M'] and not self.button_pressed:
       if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2 and self.cruise_set_speed == 0:
-        self.cruise_set_speed = 30 #self.clu_Vanz * speed_conv
+        self.cruise_set_speed = 30 * speed_conv
         
       print("self.cruise_set_speed" + str(self.cruise_set_speed), end= ' ')
       print("self.speed_conv" + str(speed_conv), end= ' ')
