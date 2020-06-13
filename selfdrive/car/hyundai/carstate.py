@@ -373,7 +373,7 @@ class CarState():
           if self.cruise_set_speed_prev:
             self.cruise_set_speed = self.cruise_set_speed_prev
           else:
-            if (self.cruise_set_speed -0.55) < 30:
+            if (self.cruise_set_speed -0.55) < 8.3:
               self.cruise_set_speed = 8.3
             else:
               self.cruise_set_speed -= 0.55
