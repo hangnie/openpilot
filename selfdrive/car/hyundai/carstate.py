@@ -61,7 +61,10 @@ def get_can_parser(CP):
     ("CF_Lca_Stat", "LCA11", 0),
     ("CF_Lca_IndLeft", "LCA11", 0),
     ("CF_Lca_IndRight", "LCA11", 0),
+
+    #add
     ("CRUISE_LAMP_M", "EMS16", 0),
+    ("Navi_SCC_Camera_Act", "SCC11", 0),
   ]
 
   checks = [
@@ -110,7 +113,7 @@ def get_can_parser(CP):
       ("SCCInfoDisplay", "SCC11", 0),
       ("ACC_ObjDist", "SCC11", 0),
       ("ACC_ObjRelSpd", "SCC11", 0),
-       ("TauGapSet", "SCC11", 0),
+      ("TauGapSet", "SCC11", 0),
       ("Navi_SCC_Camera_Act", "SCC11", 0),
 
       ("CF_VSM_Prefill", "SCC12", 0),
