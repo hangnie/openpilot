@@ -304,6 +304,7 @@ class CarState():
     
     #add
     self.cruise_set_speed_prev = 0
+    self.cruise_set_speed = 0
     # Q = np.matrix([[10.0, 0.0], [0.0, 100.0]])
     # R = 1e3
     self.v_ego_kf = KF1D(x0=[[0.0], [0.0]],
