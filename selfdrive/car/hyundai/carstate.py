@@ -365,25 +365,24 @@ class CarState():
     #                                     (cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv)
     
     if cp.vl['EMS16']['CRUISE_LAMP_M'] and not self.button_pressed:
-      if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2 and self.cruise_set_speed == 0:
-        self.cruise_set_speed = self.clu_Vanz
-        
-      print("self.cruise_set_speed" + str(self.cruise_set_speed), end= ' ')
-      print("self.speed_conv" + str(speed_conv), end=' ' )
-      print("self.button_pressed" + str(self.button_pressed))
+      if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2 and self.cruise_set_speed == 0 and self.clu_Vanz > 30:
+        self.cruise_set_speed = self.clu_Vanz * speed_conv
 
       if self.cruise_set_speed:
         if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 2:
-          self.cruise_set_speed -= 2
+          if self.cruise_set_speed_prev:
+            self.cruise_set_speed = self.cruise_set_speed_prev
+          else
+            self.cruise_set_speed -= 2 * speed_conv
         elif cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 1:
-          self.cruise_set_speed += 2
+          self.cruise_set_speed += 2 * speed_conv
       self.button_pressed = 1
     
     if not cp.vl['CLU11']['CF_Clu_CruiseSwState']:
       self.button_pressed = 0
 
-    if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 4:
-    #if cp.vl["TCS13"]['DriverBraking'] or not cp.vl['EMS16']['CRUISE_LAMP_M'] or cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 4:  
+    #if cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 4:
+    if cp.vl["TCS13"]['DriverBraking'] or not cp.vl['EMS16']['CRUISE_LAMP_M'] or cp.vl['CLU11']['CF_Clu_CruiseSwState'] == 4:  
       self.cruise_set_speed_prev = self.cruise_set_speed
       self.cruise_set_speed = 0
     
