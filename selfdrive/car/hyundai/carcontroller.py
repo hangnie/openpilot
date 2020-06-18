@@ -71,7 +71,7 @@ class CarController():
     self.last_lead_distance = 0
     self.turning_signal_timer = 0
     self.lkas_button_on = True
-    self.longcontrol = 1 #CP.openpilotLongitudinalControl
+    self.longcontrol = 0 #CP.openpilotLongitudinalControl
     self.scc_live = not CP.radarOffCan
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
