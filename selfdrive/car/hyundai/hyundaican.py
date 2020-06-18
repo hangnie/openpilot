@@ -63,8 +63,8 @@ def create_clu11(packer, frame, bus, clu11, button, speed):
 
 def create_scc12(packer, apply_accel, enabled, cnt, scc_live, scc12):
   values = scc12
-  values["aReqRaw"] = apply_accel if enabled else 0 #aReqMax
-  values["aReqValue"] = apply_accel if enabled else 0 #aReqMin
+  values["aReqRaw"] = apply_accel #if enabled else 0 #aReqMax
+  values["aReqValue"] = apply_accel #if enabled else 0 #aReqMin
   values["CR_VSM_Alive"] = cnt
   values["CR_VSM_ChkSum"] = 0
   if not scc_live:
@@ -115,6 +115,7 @@ def create_scc11(packer, frame, enabled, set_speed, lead_visible, scc_live, scc1
     values["VSetDis"] = set_speed
     values["ObjValid"] = 1 # if enabled else 0
     values["ACC_ObjStatus"] = 1
+    values["TauGapSet"] = 4
 
   return packer.make_can_msg("SCC11", 0, values)
 
