@@ -1,4 +1,4 @@
-from cereal import car
+from cereal import car, log
 from common.numpy_fast import clip
 from selfdrive.car import apply_std_steer_torque_limits
 from selfdrive.car.hyundai.hyundaican import create_lkas11, create_clu11, create_lfa_mfa, \
@@ -173,6 +173,7 @@ class CarController():
     print("CS.sccbus"+str(CS.scc_bus), end=' ')
     print("self.scc_live"+str(self.scc_live))
     print("apply_accel" + str(apply_accel))
+    print("lead :" + str(log.Plan.hasLead))
 
 
     if (CS.scc_bus or not self.scc_live) and frame % 2 == 0: 
