@@ -63,16 +63,19 @@ class CarState(CarStateBase):
     ret.steerWarning = self.mdps_error_cnt > 100 #cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail'] != 0
 
     # cruise state
-    ret.cruiseState.enabled = (cp_scc.vl["SCC12"]['ACCMode'] != 0) if not self.no_radar else \
-                                      cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0
-    ret.cruiseState.available = (cp_scc.vl["SCC11"]["MainMode_ACC"] != 0) if not self.no_radar else \
-                                      cp.vl['EMS16']['CRUISE_LAMP_M'] != 0
-    ret.cruiseState.standstill = cp_scc.vl["SCC11"]['SCCInfoDisplay'] == 4. if not self.no_radar else False
+    ret.cruiseState.enabled = cp.vl['EMS16']['CRUISE_LAMP_M']
+                                #(cp_scc.vl["SCC12"]['ACCMode'] != 0) if not self.no_radar else \
+                                #      cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0
+    ret.cruiseState.available = cp.vl['EMS16']['CRUISE_LAMP_M']
+                                #(cp_scc.vl["SCC11"]["MainMode_ACC"] != 0) if not self.no_radar else \
+                                #      cp.vl['EMS16']['CRUISE_LAMP_M'] != 0
+    ret.cruiseState.standstill = 4 #cp_scc.vl["SCC11"]['SCCInfoDisplay'] == 4. if not self.no_radar else False
     self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
     if ret.cruiseState.enabled:
       speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
-      ret.cruiseState.speed = cp_scc.vl["SCC11"]['VSetDis'] * speed_conv if not self.no_radar else \
-                                         cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv
+      ret.cruiseState.speed = 10 # 36km/h
+                              #cp_scc.vl["SCC11"]['VSetDis'] * speed_conv if not self.no_radar else \
+                              #           cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv
     else:
       ret.cruiseState.speed = 0
     self.cruise_main_button = cp.vl["CLU11"]["CF_Clu_CruiseSwMain"]
@@ -271,6 +274,9 @@ class CarState(CarStateBase):
       ("SCCMode2", "SCC14", 0),
       ("ComfortBandUpper", "SCC14", 0),
       ("ComfortBandLower", "SCC14", 0),
+
+      #For none-scc car
+      ("CRUISE_LAMP_M", "EMS16", 0),
     ]
 
     checks = [
