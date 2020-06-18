@@ -327,7 +327,8 @@ class CarInterface(CarInterfaceBase):
     if not self.CC.longcontrol and EventName.pedalPressed in events.events:
       events.events.remove(EventName.pedalPressed)
 
-    # handle button presses
+    # handle button presses 
+    # test
     #if self.CC.longcontrol and not self.CC.scc_live:
     if not self.CC.scc_live:
       for b in ret.buttonEvents:
