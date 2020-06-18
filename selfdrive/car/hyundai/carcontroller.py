@@ -177,6 +177,8 @@ class CarController():
     # send scc to car if longcontrol enabled and SCC not on bus 0 or ont live
     print("CS.sccbus"+str(CS.scc_bus), end=' ')
     print("self.scc_live"+str(self.scc_live))
+    print("apply_accel" + str(apply_accel))
+
 
     if (CS.scc_bus or not self.scc_live) and frame % 2 == 0: 
     #if self.longcontrol and (CS.scc_bus or not self.scc_live) and frame % 2 == 0:   
