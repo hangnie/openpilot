@@ -73,7 +73,7 @@ class CarState(CarStateBase):
     self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
     if ret.cruiseState.enabled:
       speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
-      ret.cruiseState.speed = 10 # 36km/h
+      ret.cruiseState.speed = 22.2 # 36km/h
                               #cp_scc.vl["SCC11"]['VSetDis'] * speed_conv if not self.no_radar else \
                               #           cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv
     else:
