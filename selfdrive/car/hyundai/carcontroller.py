@@ -98,14 +98,14 @@ class CarController():
     if CS.out.vEgo < 60 * CV.KPH_TO_MS and self.car_fingerprint == CAR.HYUNDAI_GENESIS and not CS.mdps_bus:
       lkas_active = 0
 
-      
+
     #lead car msg
     lead_msg = sm['model'].lead
     if lead_msg.prob > 0.5:
       dRel = float(lead_msg.dist- 1.52)
       yRel = float(lead_msg.relY)
       vRel = float(lead_msg.relVel)
-      vLead = float(CS.out.vEgo) + lead_msg.relVel)
+      vLead = float(CS.out.vEgo) + lead_msg.relVel
     else:
       dRel = 150
       yRel = 0
