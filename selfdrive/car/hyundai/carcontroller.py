@@ -147,6 +147,8 @@ class CarController():
     if not(min_set_speed < set_speed < 255 * CV.KPH_TO_MS):
       set_speed = min_set_speed 
     set_speed *= CV.MS_TO_MPH if CS.is_set_speed_in_mph else CV.MS_TO_KPH
+    #test
+    set_speed = 30
 
     if frame == 0: # initialize counts from last received count signals
       self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"]
@@ -199,7 +201,7 @@ class CarController():
       print("send scc12", end= '')
       can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, self.scc_live, CS.scc12))
       print("send scc11", end= '')
-      can_sends.append(create_scc11(self.packer, frame, enabled, set_speed, lead_visible, self.scc_live, CS.scc11))
+      can_sends.append(create_scc11(self.packer, frame, enabled, set_speed, lead_visible, self.scc_live, CS.scc11, self.dRel, self.yRel, self.vRel))
 
       if CS.has_scc13 and frame % 20 == 0:
         print("send scc13")
