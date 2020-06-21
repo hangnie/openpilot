@@ -117,9 +117,9 @@ def create_scc11(packer, frame, enabled, set_speed, lead_visible, scc_live, scc1
     values["TauGapSet"] = 4
     values["Navi_SCC_Camera_Status"] = 2
     values["ACC_ObjStatus"] = 1
-    values["ACC_ObjLatPos"] = yRel
+    values["ACC_ObjLatPos"] = vRel
     values["ACC_ObjDist"] = dRel
-    values["ACC_ObjRelSpd"] = vRel
+    values["ACC_ObjRelSpd"] = yRel
         
 
   return packer.make_can_msg("SCC11", 0, values)

@@ -73,6 +73,10 @@ class CarController():
     self.lkas_button_on = True
     self.longcontrol = 0 #CP.openpilotLongitudinalControl
     self.scc_live = False #not CP.radarOffCan
+    self.dRel = 0
+    self.yRel = 0
+    self.vRel = 0
+    self.vLead = 0
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
              left_lane, right_lane, left_lane_depart, right_lane_depart, set_speed, lead_visible, sm):
@@ -102,14 +106,14 @@ class CarController():
     #lead car msg
     lead_msg = sm['model'].lead
     if lead_msg.prob > 0.5:
-      dRel = float(lead_msg.dist- 1.52)
-      yRel = float(lead_msg.relY)
-      vRel = float(lead_msg.relVel)
-      vLead = float(CS.out.vEgo) + lead_msg.relVel
+      self.dRel = float(lead_msg.dist- 1.52)
+      self.yRel = float(lead_msg.relY)
+      self.vRel = float(lead_msg.relVel)
+      self.vLead = float(CS.out.vEgo) + lead_msg.relVel
     else:
-      dRel = 150
-      yRel = 0
-      vRel = 0
+      self.dRel = 150
+      self.yRel = 0
+      self.vRel = 0
 
     print("dRel:" + str(dRel), end= ' ')
     print("yRel:" + str(yRel), end= ' ')
