@@ -116,7 +116,8 @@ class CarController():
       self.vRel = 0
     
     if frame % 2 == 0:
-      print("dRel:%9d yRel:%9d vRel:%9d" % (self.dRel,  self.yRel, self.vRel))
+      print("dRel:%9d yRel:%9d vRel:%9d apply_accel:%9d" % (self.dRel,  self.yRel, self.vRel, apply_accel))
+
 
 
     # Disable steering while turning blinker on and speed below 60 kph
@@ -201,13 +202,10 @@ class CarController():
 
     if (CS.scc_bus or not self.scc_live) and frame % 2 == 0: 
     #if self.longcontrol and (CS.scc_bus or not self.scc_live) and frame % 2 == 0:   
-      print("send scc12", end= '')
       can_sends.append(create_scc12(self.packer, apply_accel, enabled, self.scc12_cnt, self.scc_live, CS.scc12))
-      print("send scc11", end= '')
       can_sends.append(create_scc11(self.packer, frame, enabled, set_speed, lead_visible, self.scc_live, CS.scc11, self.dRel, self.yRel, self.vRel))
 
       if CS.has_scc13 and frame % 20 == 0:
-        print("send scc13")
         can_sends.append(create_scc13(self.packer, CS.scc13))
       if CS.has_scc14:
         can_sends.append(create_scc14(self.packer, enabled, CS.scc14))
