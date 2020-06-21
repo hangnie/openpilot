@@ -115,9 +115,9 @@ class CarController():
       self.yRel = 0
       self.vRel = 0
 
-    print("dRel:" + str(dRel), end= ' ')
-    print("yRel:" + str(yRel), end= ' ')
-    print("vRel:" + str(vRel))
+    print("dRel:" + str(self.dRel), end= ' ')
+    print("yRel:" + str(self.yRel), end= ' ')
+    print("vRel:" + str(self.vRel))
 
 
     # Disable steering while turning blinker on and speed below 60 kph
