@@ -75,7 +75,7 @@ class CarController():
     self.scc_live = False #not CP.radarOffCan
 
   def update(self, enabled, CS, frame, actuators, pcm_cancel_cmd, visual_alert,
-             left_lane, right_lane, left_lane_depart, right_lane_depart, set_speed, lead_visible):
+             left_lane, right_lane, left_lane_depart, right_lane_depart, set_speed, lead_visible, sm):
 
     # *** compute control surfaces ***
 
@@ -98,6 +98,24 @@ class CarController():
     if CS.out.vEgo < 60 * CV.KPH_TO_MS and self.car_fingerprint == CAR.HYUNDAI_GENESIS and not CS.mdps_bus:
       lkas_active = 0
 
+      
+    #lead car msg
+    lead_msg = sm['model'].lead
+    if lead_msg.prob > 0.5:
+      dRel = float(lead_msg.dist- 1.52)
+      yRel = float(lead_msg.relY)
+      vRel = float(lead_msg.relVel)
+      vLead = float(CS.out.vEgo) + lead_msg.relVel)
+    else:
+      dRel = 150
+      yRel = 0
+      vRel = 0
+
+    print("dRel:" + str(dRel), end= ' ')
+    print("yRel:" + str(yRel), end= ' ')
+    print("vRel:" + str(vRel))
+
+
     # Disable steering while turning blinker on and speed below 60 kph
     if CS.out.leftBlinker or CS.out.rightBlinker:
       if self.car_fingerprint not in [CAR.KIA_OPTIMA, CAR.KIA_OPTIMA_H]:
@@ -108,6 +126,7 @@ class CarController():
       lkas_active = 0
     if self.turning_signal_timer > 0:
       self.turning_signal_timer -= 1
+
 
     if not lkas_active:
       apply_steer = 0
