@@ -114,10 +114,9 @@ class CarController():
       self.dRel = 150
       self.yRel = 0
       self.vRel = 0
-
-    print("dRel:" + str(self.dRel), end= ' ')
-    print("yRel:" + str(self.yRel), end= ' ')
-    print("vRel:" + str(self.vRel))
+    
+    if frame % 2 == 0:
+      print("dRel:%9d yRel:%9d vRel:%9d" % (self.dRel,  self.yRel, self.vRel))
 
 
     # Disable steering while turning blinker on and speed below 60 kph
@@ -195,8 +194,8 @@ class CarController():
       can_sends.append(create_mdps12(self.packer, frame, CS.mdps12))
 
     # send scc to car if longcontrol enabled and SCC not on bus 0 or ont live
-    print("CS.sccbus"+str(CS.scc_bus), end=' ')
-    print("self.scc_live"+str(self.scc_live))
+    #print("CS.sccbus"+str(CS.scc_bus), end=' ')
+    #print("self.scc_live"+str(self.scc_live))
     
 
 
