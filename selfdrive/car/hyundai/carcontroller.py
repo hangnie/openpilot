@@ -116,7 +116,7 @@ class CarController():
       self.vRel = 0
     
     if frame % 2 == 0:
-      print("dRel:%9d yRel:%9d vRel:%9d apply_accel:%.4f" % (self.dRel,  self.yRel, self.vRel, apply_accel))
+      print("dRel:%9d yRel:%.4f vRel:%.4f apply_accel:%.4f" % (self.dRel,  self.yRel, self.vRel, apply_accel))
 
 
 
