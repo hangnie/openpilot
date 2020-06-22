@@ -689,6 +689,7 @@ static void ui_draw_vision_footer(UIState *s) {
   nvgRect(s->vg, s->scene.ui_viz_rx, footer_y, s->scene.ui_viz_rw, footer_h);
 
   ui_draw_vision_face(s);
+  ui_draw_vision_brake(s);
 
 #ifdef SHOW_SPEEDLIMIT
   // ui_draw_vision_map(s);
@@ -928,6 +929,11 @@ void ui_nvg_init(UIState *s) {
     assert(s->img_network[i] != 0);
   }
 
+
+  assert(s->img_brake >= 0);
+  s->img_brake = nvgCreateImage(s->vg, "../assets/img_brake_disc.png", 1);
+
+  
   // init gl
   s->frame_program = load_program(frame_vertex_shader, frame_fragment_shader);
   assert(s->frame_program);
