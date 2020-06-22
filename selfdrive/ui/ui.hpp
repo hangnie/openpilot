@@ -1,6 +1,6 @@
 #ifndef _UI_H
 #define _UI_H
-#include "cereal/gen/cpp/log.capnp.h"
+
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>
 #define NANOVG_GL3_IMPLEMENTATION
@@ -14,6 +14,7 @@
 
 #include <capnp/serialize.h>
 #include <pthread.h>
+
 #include "nanovg.h"
 
 #include "common/mat.h"
@@ -22,6 +23,8 @@
 #include "common/framebuffer.h"
 #include "common/modeldata.h"
 #include "messaging.hpp"
+#include "cereal/gen/c/log.capnp.h"
+
 #include "sound.hpp"
 
 #define STATUS_STOPPED 0
@@ -33,6 +36,11 @@
 #define NET_CONNECTED 0
 #define NET_DISCONNECTED 1
 #define NET_ERROR 2
+
+#define ALERTSIZE_NONE 0
+#define ALERTSIZE_SMALL 1
+#define ALERTSIZE_MID 2
+#define ALERTSIZE_FULL 3
 
 #define COLOR_BLACK nvgRGBA(0, 0, 0, 255)
 #define COLOR_BLACK_ALPHA(x) nvgRGBA(0, 0, 0, x)
@@ -55,7 +63,8 @@ const int vwp_h = 1080;
 const int nav_w = 640;
 const int nav_ww= 760;
 const int sbr_w = 300;
-const int bdr_s = 30;
+const int bdr_s = 30; 
+const int bdr_is = 30;
 const int box_x = sbr_w+bdr_s;
 const int box_y = bdr_s;
 const int box_w = vwp_w-sbr_w-(bdr_s*2);
@@ -111,8 +120,16 @@ typedef struct UIScene {
   bool decel_for_model;
 
   float speedlimit;
+  float angleSteers;
+  float speedlimitaheaddistance;
+  bool speedlimitahead_valid;
   bool speedlimit_valid;
   bool map_valid;
+  bool brakeLights;
+
+  bool leftBlinker;
+  bool rightBlinker;
+  int blinker_blinkingrate;
 
   float curvature;
   int engaged;
@@ -139,10 +156,12 @@ typedef struct UIScene {
 
   int front_box_x, front_box_y, front_box_width, front_box_height;
 
+  bool recording;
+
   uint64_t alert_ts;
-  std::string alert_text1;
-  std::string alert_text2;
-  cereal::ControlsState::AlertSize alert_size;
+  char alert_text1[1024];
+  char alert_text2[1024];
+  uint8_t alert_size;
   float alert_blinkingrate;
 
   float awareness_status;
@@ -150,14 +169,23 @@ typedef struct UIScene {
   // Used to show gps planner status
   bool gps_planner_active;
 
-  cereal::ThermalData::NetworkType networkType;
-  cereal::ThermalData::NetworkStrength networkStrength;
-  int batteryPercent;
-  bool batteryCharging;
+  // dev ui
+  float angleSteersDes;
+  float pa0;
   float freeSpace;
-  cereal::ThermalData::ThermalStatus thermalStatus;
+  bool steerOverride;
+  float output_scale;
+  
+  int cpu0;
+
+  uint8_t networkType;
+  uint8_t networkStrength;
+  int batteryPercent;
+  char batteryStatus[64];
+  uint8_t thermalStatus;
+  char ipAddr[20];
   int paTemp;
-  cereal::HealthData::HwType hwType;
+  int hwType;
   int satelliteCount;
   uint8_t athenaStatus;
 } UIScene;
@@ -196,6 +224,7 @@ typedef struct UIState {
   int img_turn;
   int img_face;
   int img_map;
+  int img_brake;
   int img_button_settings;
   int img_button_home;
   int img_battery;
@@ -210,6 +239,8 @@ typedef struct UIState {
   SubSocket *radarstate_sock;
   SubSocket *map_data_sock;
   SubSocket *uilayout_sock;
+  SubSocket *carstate_sock;
+  SubSocket *livempc_sock;  
   SubSocket *thermal_sock;
   SubSocket *health_sock;
   SubSocket *ubloxgnss_sock;
@@ -219,7 +250,7 @@ typedef struct UIState {
   Poller * poller;
   Poller * ublox_poller;
 
-  cereal::UiLayoutState::App active_app;
+  int active_app;
 
   // vision state
   bool vision_connected;
@@ -274,8 +305,9 @@ typedef struct UIState {
   bool limit_set_speed;
   float speed_lim_off;
   bool is_ego_over_limit;
-  std::string alert_type;
+  char alert_type[64];
   AudibleAlert alert_sound;
+  int alert_size;
   float alert_blinking_alpha;
   bool alert_blinked;
   bool started;
@@ -299,13 +331,11 @@ typedef struct UIState {
 } UIState;
 
 // API
-void ui_draw_vision_alert(UIState *s, cereal::ControlsState::AlertSize va_size, int va_color,
+void ui_draw_vision_alert(UIState *s, int va_size, int va_color,
                           const char* va_text1, const char* va_text2);
 void ui_draw(UIState *s);
 void ui_draw_sidebar(UIState *s);
 void ui_draw_image(NVGcontext *vg, float x, float y, float w, float h, int image, float alpha);
-void ui_draw_rect(NVGcontext *vg, float x, float y, float w, float h, NVGcolor color, float r = 0, int width = 0);
-void ui_draw_rect(NVGcontext *vg, float x, float y, float w, float h, NVGpaint paint, float r = 0);
 void ui_nvg_init(UIState *s);
 
 #endif
