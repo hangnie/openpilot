@@ -28,19 +28,26 @@ void set_volume(int volume) {
 
 
 sound_file sound_table[] = {
-  { cereal::CarControl::HUDControl::AudibleAlert::CHIME_DISENGAGE, "../assets/sounds/disengaged.wav", false },
-  { cereal::CarControl::HUDControl::AudibleAlert::CHIME_ENGAGE, "../assets/sounds/engaged.wav", false },
-  { cereal::CarControl::HUDControl::AudibleAlert::CHIME_WARNING1, "../assets/sounds/warning_1.wav", false },
-  { cereal::CarControl::HUDControl::AudibleAlert::CHIME_WARNING2, "../assets/sounds/warning_2.wav", false },
-  { cereal::CarControl::HUDControl::AudibleAlert::CHIME_WARNING2_REPEAT, "../assets/sounds/warning_2.wav", true },
-  { cereal::CarControl::HUDControl::AudibleAlert::CHIME_WARNING_REPEAT, "../assets/sounds/warning_repeat.wav", true },
-  { cereal::CarControl::HUDControl::AudibleAlert::CHIME_ERROR, "../assets/sounds/error.wav", false },
-  { cereal::CarControl::HUDControl::AudibleAlert::CHIME_PROMPT, "../assets/sounds/error.wav", false },
-  { cereal::CarControl::HUDControl::AudibleAlert::NONE, NULL, false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeDisengage, "../assets/sounds/disengaged.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeEngage, "../assets/sounds/engaged.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeWarning1, "../assets/sounds/warning_1.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeWarning2, "../assets/sounds/warning_2.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeWarningRepeat, "../assets/sounds/warning_repeat.wav", true },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeError, "../assets/sounds/error.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimePrompt, "../assets/sounds/error.wav", false },
+{ cereal_CarControl_HUDControl_AudibleAlert_chimeReady, "../assets/sounds/ready.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeDoorOpen, "../assets/sounds/dooropen.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeGearDrive, "../assets/sounds/geardrive.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeLaneChange, "../assets/sounds/lanechange.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeLaneDeparture, "../assets/sounds/lanedeparture.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeRoadWarning, "../assets/sounds/roadwarning.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeSeatBelt, "../assets/sounds/seatbelt.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_chimeViewUncertain, "../assets/sounds/viewuncertain.wav", false },
+  { cereal_CarControl_HUDControl_AudibleAlert_none, NULL, false },
 };
 
 sound_file* get_sound_file(AudibleAlert alert) {
-  for (sound_file *s = sound_table; s->alert != cereal::CarControl::HUDControl::AudibleAlert::NONE; s++) {
+  for (sound_file *s = sound_table; s->alert != cereal_CarControl_HUDControl_AudibleAlert_none; s++) {
     if (s->alert == alert) {
       return s;
     }
@@ -74,7 +81,7 @@ void ui_sound_init() {
   slplay_setup(&error);
   if (error) goto fail;
 
-  for (sound_file *s = sound_table; s->alert != cereal::CarControl::HUDControl::AudibleAlert::NONE; s++) {
+  for (sound_file *s = sound_table; s->alert != cereal_CarControl_HUDControl_AudibleAlert_none; s++) {
     slplay_create_player_for_uri(s->uri, &error);
     if (error) goto fail;
   }
