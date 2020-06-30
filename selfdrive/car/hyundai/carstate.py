@@ -409,7 +409,6 @@ class CarState():
 
 
         elif self.prev_clu_CruiseSwState == 2:  # dn
-          print("dn vsd:%d vsd:" % (self.VSetDis, self.clu_CruiseSwState, self.cruise_set_first, self.clu_Vanz, delta_vsetdis, self.curise_sw_check))
           if self.cruise_set_first:
             self.cruise_set_first = 0
             #첫 설정이면 현재 속도 입력
@@ -427,7 +426,7 @@ class CarState():
 
         #브레이크 또는 cancel 버튼 누름 또는 크루즈 상태에 따른 cruise set 초기화
         elif self.prev_clu_CruiseSwState == 4 or self.brake_pressed:  # cancel /brake/ cruise off
-          print("cancel vsd:%d prev_vsd:%d prev_clu_csw:%d clu_csw:%d cruise_set_speed_kph:%d" % (self.VSetDis, self.prev_VSetDis, self.prev_clu_CruiseSwState, self.clu_CruiseSwState, self.cruise_set_speed_kph))
+          #print("cancel vsd:%d prev_vsd:%d prev_clu_csw:%d clu_csw:%d cruise_set_speed_kph:%d" % (self.VSetDis, self.prev_VSetDis, self.prev_clu_CruiseSwState, self.clu_CruiseSwState, self.cruise_set_speed_kph))
           self.cruise_set_first = 1
           self.prev_VSetDis = self.cruise_set_speed_kph
           cruise_set_speed_kph = 0
