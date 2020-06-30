@@ -370,12 +370,12 @@ class SpdController():
         # control process
         target_set_speed = set_speed
 
-        if (set_speed - CS.clu_Vanz) > 0:
-            set_speed_diff = 1 # set_speed를 올려 더 가속해야함
-        elif (set_speed - CS.clu_Vanz) < 0:
-            set_speed_diff = -1 # set_speed를 낮춰 더 감속해야함
+        #if (set_speed - CS.clu_Vanz) > 0:
+        #    set_speed_diff = 1 # set_speed를 올려 더 가속해야함
+        #elif (set_speed - CS.clu_Vanz) < 0:
+        #    set_speed_diff = -1 # set_speed를 낮춰 더 감속해야함
 
-        delta = int(set_speed) - int(CS.VSetDis)    # + int(round(set_speed_diff / 2, 0))
+        delta = int(set_speed) - int(CS.clu_Vanz) #- int(CS.VSetDis)    # + int(round(set_speed_diff / 2, 0))
         if dec_step_cmd == 0 and delta < -1:
             if delta < -3:
                 dec_step_cmd = 4
@@ -396,23 +396,26 @@ class SpdController():
                     self.seq_step_debug = 97
                     btn_type = Buttons.SET_DECEL
         elif delta <= -1:
-            set_speed = CS.VSetDis - dec_step_cmd + set_speed_diff
+            set_speed = CS.VSetDis - dec_step_cmd #+ set_speed_diff
             
             #Carstate 값 변경
-            CS.VSetDis -= dec_step_cmd
+            #CS.VSetDis = CS.clu_Vanz
             self.seq_step_debug = 98   
             btn_type = Buttons.SET_DECEL
             self.long_curv_timer = 0
         elif delta >= 1 and (model_speed > 200 or CS.clu_Vanz < 70):
-            set_speed = CS.VSetDis + dec_step_cmd + set_speed_diff
+            set_speed = CS.VSetDis + dec_step_cmd #+ set_speed_diff
             
             #Carstate 값 변경
-            CS.VSetDis += dec_step_cmd  #- int(round(set_speed_diff / 2, 0)) #가속 폭을 반감하여 가속함 (천천히 가속) / 목표치에 다가갈 수록 폭이 줄어듬
+            #CS.VSetDis = dec_step_cmd  #- int(round(set_speed_diff / 2, 0)) #가속 폭을 반감하여 가속함 (천천히 가속) / 목표치에 다가갈 수록 폭이 줄어듬
             self.seq_step_debug = 99
             btn_type = Buttons.RES_ACCEL
             self.long_curv_timer = 0            
             if set_speed > CS.cruise_set_speed_kph:
                 set_speed = CS.cruise_set_speed_kph
+        
+        CS.VSetDis = CS.clu_Vanz
+        
         if CS.cruise_set_mode == 0:
             btn_type = Buttons.NONE
 
