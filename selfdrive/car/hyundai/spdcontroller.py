@@ -415,14 +415,14 @@ class SpdController():
                 set_speed = CS.cruise_set_speed_kph
         
         CS.VSetDis = CS.clu_Vanz
-        
+
         if CS.cruise_set_mode == 0:
             btn_type = Buttons.NONE
 
         #str3 = 'SS={:03.0f} TSS={:03.0f} SSD={:03.0f} VSD={:03.0f} CLU={:03.0f}/{:03.0f}/{:03.0f} DG/dec={:02.0f}/{:02.0f}'.format(
         #    set_speed, target_set_speed, set_speed_diff, CS.VSetDis, CS.driverAcc_time, long_wait_cmd, self.long_curv_timer, self.seq_step_debug, dec_step_cmd )
-        str3 = 'SS={:03.0f} CLU={:03.0f} SSD={:03.0f} pVSD={:03.0f} VSD={:03.0f} DG/dec={:02.0f}/{:02.0f} '.format(
-            set_speed, CS.clu_Vanz, set_speed_diff, CS.prev_VSetDis, CS.VSetDis, self.seq_step_debug, dec_step_cmd )
+        str3 = 'CSS={:03.0f} SS={:03.0f} CLU={:03.0f} SSD={:03.0f} pVSD={:03.0f} VSD={:03.0f} DG/dec={:02.0f}/{:02.0f} '.format(
+            CS.cruise_set_speed_kph, set_speed, CS.clu_Vanz, set_speed_diff, CS.prev_VSetDis, CS.VSetDis, self.seq_step_debug, dec_step_cmd )
         #str4 = ' LD/LS={:03.0f}/{:03.0f} '.format(  CS.lead_distance, CS.lead_objspd )
         str4 = ' LD/LS={:03.0f}/{:03.0f} '.format(  dRel, vRel )
 
