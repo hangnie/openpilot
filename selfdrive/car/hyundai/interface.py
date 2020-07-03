@@ -238,6 +238,14 @@ class CarInterface(CarInterfaceBase):
       #ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.25], [0.05]]
       ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[9., 22.], [9., 22.]]   # 9m/s = 32.4km/h  ~  22m/s = 79.2 km/h
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.18,0.20], [0.02,0.05]]
+    elif candidate == CAR.I40:
+      ret.lateralTuning.pid.kf = 0.00005
+      ret.mass = 1515. + STD_CARGO_KG
+      ret.wheelbase = 2.77
+      ret.steerRatio = 12.75
+      ret.steerRateCost = 0.4
+      ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[9., 22.], [9., 22.]]   # 9m/s = 32.4km/h  ~  22m/s = 79.2 km/h
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.18,0.20], [0.02,0.05]]
 
     ret.minEnableSpeed = -1.   # enable is done by stock ACC, so ignore this
 
