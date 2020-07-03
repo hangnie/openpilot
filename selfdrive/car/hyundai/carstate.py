@@ -64,6 +64,11 @@ def get_can_parser(CP):
 
     ("CRUISE_LAMP_M", "EMS16", 0),
     ("CRUISE_LAMP_S", "EMS16", 0),
+
+    # ("SCCInfoDisplay", "SCC11", 0),
+    # ("ACC_ObjDist", "SCC11", 0),
+    # ("ACC_ObjRelSpd", "SCC11", 0),
+    # ("Navi_SCC_Camera_Act", "SCC11", 0),
   ]
 
   checks = [
@@ -566,8 +571,8 @@ class CarState():
     self.steer_error = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail']
     self.brake_error = 0
 
-
-    self.driverOverride = cp.vl["TCS13"]["DriverOverride"]     # 1 Acc,  2 bracking, 0 Normal
+    print("===> DriverOverride : ", cp.vl["TCS13"]["DriverOverride"])
+    self.driverOverride = cp.vl["TCS13"]["DriverOverride"]     # 1 Acc,  2 bracking, 0 Normal  2020-07-04  HKH
 
     #운전자 개입
     if self.driverOverride == 1:
@@ -578,11 +583,25 @@ class CarState():
     if self.driverAcc_time:
       self.driverAcc_time -= 1
 
+    print("===> SCCInfoDisplay : ", cp_scc.vl["SCC11"]['SCCInfoDisplay'])
+    print("===> ACC_ObjDist : ", cp_scc.vl["SCC11"]['ACC_ObjDist'])
+    print("===> ACC_ObjRelSpd : ", cp_scc.vl["SCC11"]['ACC_ObjRelSpd'])
+
     self.sccInfoDisp = cp_scc.vl["SCC11"]['SCCInfoDisplay']
+    print("===> sccInfoDisp : ", self.sccInfoDisp)
+
     self.stopped = self.sccInfoDisp == 4. if not self.no_radar else False
+    print("===> stopped : ", self.stopped)
+    print("===> no_radar : ", self.no_radar)
+
     self.lead_distance = cp_scc.vl["SCC11"]['ACC_ObjDist'] if not self.no_radar else 0
+    print("===> lead_distance : ", self.lead_distance)
+
     self.lead_objspd = cp_scc.vl["SCC11"]['ACC_ObjRelSpd'] if not self.no_radar else 0
+    print("===> lead_objspd : ", self.lead_objspd)
+
     self.lead_objspd = self.lead_objspd * CV.MS_TO_KPH
+    print("===> lead_objspd : ", self.lead_objspd)
 
     self.user_brake = 0
 

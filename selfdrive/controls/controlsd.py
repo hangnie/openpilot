@@ -490,8 +490,17 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
 
   car_recognized = CP.carName != 'mock'
   # If stock camera is disconnected, we loaded car controls and it's not chffrplus
+
+  print("===> CP.enableCamera : ", CP.enableCamera)
+  print("===> CI.CC : ", CI.CC)
+
   controller_available = CP.enableCamera and CI.CC is not None and not passive
+  print("===> controller_available : ", controller_available)
+  print("===> CP.communityFeature : ", CP.communityFeature)
+  print("===> community_feature_toggle : ", community_feature_toggle)
+
   community_feature_disallowed = CP.communityFeature and not community_feature_toggle
+
   read_only = not car_recognized or not controller_available or CP.dashcamOnly or community_feature_disallowed
   if read_only:
     CP.safetyModel = car.CarParams.SafetyModel.noOutput
