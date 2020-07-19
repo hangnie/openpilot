@@ -115,13 +115,44 @@ def create_gas_command(packer, gas_amount, idx):
 
 
 def is_ecu_disconnected(fingerprint, fingerprint_list, ecu_fingerprint, car, ecu):
+  # is_ecu_disconnected(i40 핑거프린터, 전체핑거프린터, {3: {832, 1156, 1191, 1342]}, HYUNDAI I40 2012 1.7D, 3):
   # check if a stock ecu is disconnected by looking for specific CAN msgs in the fingerprint
   # return True if the reference car fingerprint contains the ecu fingerprint msg and
   # fingerprint does not contains messages normally sent by a given ecu
+  # (지문에서 특정 CAN msgs를 찾아 스톡 ECU가 분리되었는지 점검하십시오.)
+  # (참조 차량 지문에 ecu 지문 메시지가 포함되어 있으면 True를 반환하고)
+  # (지정된 ecu가 일반적으로 보낸 메시지를 지문에 포함하지 않습니다)
+  
+  # for 함수 : 순서형 자료(list)를 반복 (for x family => family 라는 목록에서 각각의 항목을 x에 넣음)
+  # any() 함수 : 인자중에 True(1)가 하나라도 있으면 True
+  # in 함수 : 특정한 문자열 안에 찾고자 하는 문자열이 있으면 True ('전체 문자열(Welcome)' in '찾고자하는 문자열(come)' = True)
+
+  print("===[init]> fingerprint      : ", fingerprint)
+  # print("===[init]> fingerprint_list : ", fingerprint_list)
+  print("===[init]> ecu_fingerprint  : ", ecu_fingerprint)
+  print("===[init]> car              : ", car)
+  print("===[init]> ecu              : ", ecu)
+  
   ecu_in_car = False
-  for car_finger in fingerprint_list[car]:
+  print("===[init]> ecu_in_car1      : ", ecu_in_car)
+
+  for car_finger in fingerprint_list[car]:   # 전체 핑거프린트 중 내 차량의 핑거크린트를 찾아 항목 하나씩 꺼내여 car_finger 에 넣음
+    print("===[init]> car_finger       : ", car_finger)
     if any(msg in car_finger for msg in ecu_fingerprint[ecu]):
       ecu_in_car = True
+      print("===[init]> ecu_in_car2      : ", ecu_in_car)
+
+   
+    #for msg in ecu_fingerprint[ecu]:         # ecu 핑거프린트 항목 중 하나씩 꺼내어 msg에 넣고 
+    #  print("===[init]> msg              : ", msg)
+
+      #if any(car_finger in msg):             # any, in 함수로 msg와 아까 꺼낸 car_finger와 비교
+      #  ecu_in_car = True
+      #  print("===[init]> msg              : ", msg)
+      #  print("===[init]> ecu_in_car2      : ", ecu_in_car)
+    
+    print("=== for end ===")
+    
 
   return ecu_in_car and not any(msg in fingerprint for msg in ecu_fingerprint[ecu])
 

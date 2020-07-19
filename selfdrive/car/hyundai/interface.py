@@ -280,13 +280,25 @@ class CarInterface(CarInterfaceBase):
     ret.brakeMaxBP = [0., 20.]
     ret.brakeMaxV = [1., 0.8]
 
+    print(" ===[I]> fingerprint[0]  : ", fingerprint[0])
+    # print(" ===[I]> FINGERPRINTS    : ", FINGERPRINTS)
+    print(" ===[I]> ECU_FINGERPRINT : ", ECU_FINGERPRINT)
+    print(" ===[I]> candidate       : ", candidate)
+    print(" ===[I]> Ecu.fwdCamera   : ", Ecu.fwdCamera)
+    print(" ===[I]> has_relay       : ", has_relay)
+
+
+
     ret.enableCamera = is_ecu_disconnected(fingerprint[0], FINGERPRINTS, ECU_FINGERPRINT, candidate, Ecu.fwdCamera) or has_relay
+    print(" ===[I]> ret.enableCamera : ", ret.enableCamera)
+    ret.enableCamera = True                                  # 2020.07.05 HKH 강제 수정
     ret.openpilotLongitudinalControl = False
 
     ret.stoppingControl = True
     ret.startAccel = 0.0
 
-    # ignore CAN2 address if L-CAN on the same BUS
+    # ignore CAN2 address if L-CAN on the same BUS 
+    # (L-CAN이 동일한 버스에 있는 경우 CAN2 주소 무시)
     ret.mdpsBus = 1 if 593 in fingerprint[1] and 1296 not in fingerprint[1] else 0
     ret.sasBus = 1 if 688 in fingerprint[1] and 1296 not in fingerprint[1] else 0
     ret.sccBus = 0 if 1056 in fingerprint[0] else 1 if 1056 in fingerprint[1] and 1296 not in fingerprint[1] \
@@ -335,12 +347,13 @@ class CarInterface(CarInterfaceBase):
     # steering wheel
     ret.steeringAngle = self.CS.angle_steers
     ret.steeringRate = self.CS.angle_steers_rate  # it's unsigned
-
     ret.steeringTorque = self.CS.steer_torque_driver
     ret.steeringPressed = self.CS.steer_override
     ret.steeringRateLimited = self.CC.steer_rate_limited if self.CC is not None else False
+    
     # cruise state
-    # most HKG cars has no long control, it is safer and easier to engage by main on
+    # most HKG cars has no long control, it is safer and easier to engage by main on 
+    # (대부분의 HKG 자동차는 긴 제어력을 가지고 있지 않으며, 메인 엔진으로 주행하는 것이 더 안전하고 쉽다.)
     ret.cruiseState.enabled = (self.CS.pcm_acc_status != 0) if self.CC.longcontrol else bool(self.CS.main_on)
     if self.CS.pcm_acc_status != 0:
       ret.cruiseState.speed = self.CS.cruise_set_speed
@@ -351,7 +364,8 @@ class CarInterface(CarInterfaceBase):
 
     #ret.cruise_set_mode = self.CS.cruise_set_mode
     
-    # Some HKG cars only have blinker flash signal
+    # Some HKG cars only have blinker(깜빡이) flash signal
+    # (일부 HKG 차량에는 깜박이는 플래시 신호만 있다.)
     #if self.CP.carFingerprint not in [CAR.IONIQ_HEV, CAR.KONA, CAR.KONA_HEV]:
       #self.CS.left_blinker_on = self.CS.left_blinker_flash or self.CS.prev_left_blinker_on and self.CC.turning_signal_timer
       #self.CS.right_blinker_on = self.CS.right_blinker_flash or self.CS.prev_right_blinker_on and self.CC.turning_signal_timer
@@ -363,7 +377,6 @@ class CarInterface(CarInterfaceBase):
       self.blinker_timer -= 1
     else:
       blinker_status = 0
-
 
     if blinker_status == 3:
       ret.leftBlinker = bool(self.blinker_timer)
@@ -401,8 +414,15 @@ class CarInterface(CarInterfaceBase):
       
     ret.buttonEvents = buttonEvents
 
+    print(" ===[I]> self.CS.door_all_closed : ", self.CS.door_all_closed )
+    print(" ===[I]> self.CS.seatbelt        : ", self.CS.seatbelt )
+
+    # CS는 carstate.py 약자이며, seatbelt는 carstate.py에 dbc 코드로 정의됨 2020.7.5 HKH
     ret.doorOpen = not self.CS.door_all_closed
-    ret.seatbeltUnlatched = not self.CS.seatbelt
+    ret.seatbeltUnlatched = not self.CS.seatbelt    
+
+    print(" ===[I]> ret.doorOpen            : ", ret.doorOpen )
+    print(" ===[I]> ret.seatbeltUnlatched   : ", ret.seatbeltUnlatched  )
 
     # low speed steer alert hysteresis logic (only for cars with steer cut off above 10 m/s)
 
@@ -413,61 +433,121 @@ class CarInterface(CarInterfaceBase):
     self.lkas_button_alert = not self.CC.lkas_button
     self.low_speed_alert = self.CC.low_speed_car
     self.steer_angle_over_alert = self.CC.streer_angle_over
+     
+    print(" ===[I]> 기 본 값  !!! === ")
+    print(" ===[I]> self.CS.esp_disabled         : ", self.CS.esp_disabled )
+    print(" ===[I]> ret.doorOpen                 : ", ret.doorOpen )
+    print(" ===[I]> ret.seatbeltUnlatched        : ", ret.seatbeltUnlatched )
+    print(" ===[I]> self.CS.main_on              : ", self.CS.main_on )
+    print(" ===[I]> ret.gearShifter              : ", ret.gearShifter )
+    print(" ===[I]> self.steer_angle_over_alert  : ", self.steer_angle_over_alert )
+    print(" ===[I]> self.CS.steer_error          : ", self.CS.steer_error         )
+    print(" ===[I]> self.lkas_button_alert       : ", self.lkas_button_alert )
+    print(" ===[I]> self.CS.lkas_LdwsLHWarning   : ", self.CS.lkas_LdwsLHWarning )
+    print(" ===[I]> self.CS.lkas_LdwsRHWarning   : ", self.CS.lkas_LdwsRHWarning )
+    print(" ===[I]> ret.cruiseState.enabled      : ", ret.cruiseState.enabled )
+    print(" ===[I]> self.cruise_enabled_prev     : ", self.cruise_enabled_prev )
+    print(" ===[I]> ret.gearShifter              : ", ret.gearShifter )
+    print(" ===[I]> self.CS.clu_Vanz             : ", self.CS.clu_Vanz )
+    print(" ===[I]> self.turning_indicator_alert : ", self.turning_indicator_alert )
+    print(" ===[I]> self.CC.steer_torque_over    : ", self.CC.steer_torque_over )
+    print(" ===[I]> self.CS.stopped              : ", self.CS.stopped )
+    print(" ===[I]> ret.cruiseState.standstill   : ", ret.cruiseState.standstill )
 
+    print(" ===[I]> 검증시작!!! === ")
 
     events = []
+
     if self.CS.esp_disabled:
       events.append(create_event('espDisabled', [ET.NO_ENTRY, ET.SOFT_DISABLE])) 
+      print(" ===[I2]> self.CS.esp_disabled    : ", self.CS.esp_disabled )
     elif ret.doorOpen:
       events.append(create_event('doorOpen', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
+      print(" ===[I2]> ret.doorOpen            : ", ret.doorOpen )
     elif ret.seatbeltUnlatched:
       events.append(create_event('seatbeltNotLatched', [ET.NO_ENTRY, ET.SOFT_DISABLE]))
+      print(" ===[I2]> ret.seatbeltUnlatched   : ", ret.seatbeltUnlatched )
     elif not self.CS.main_on:
       events.append(create_event('wrongCarMode', [ET.NO_ENTRY, ET.USER_DISABLE])) 
+      print(" ===[I2]> self.CS.main_on         : ", self.CS.main_on )
     elif ret.gearShifter == GearShifter.reverse:
       events.append(create_event('reverseGear', [ET.NO_ENTRY, ET.USER_DISABLE]))      
+      print(" ===[I2]> GearShifter.reverse     : ", GearShifter.reverse )
     elif not ret.gearShifter == GearShifter.drive:
       events.append(create_event('wrongGear', [ET.NO_ENTRY, ET.USER_DISABLE]))
+      print(" ===[I2]> GearShifter.drive       : ", GearShifter.drive )
     elif self.steer_angle_over_alert or self.CS.steer_error:
       events.append(create_event('steerTempUnavailable', [ET.NO_ENTRY, ET.WARNING]))
+      print(" ===[I2]> self.steer_angle_over_alert   : ", self.steer_angle_over_alert )
+      print(" ===[I2]> self.CS.steer_error           : ", self.CS.steer_error         )
     elif self.lkas_button_alert:
       events.append(create_event('lkasButtonOff', [ET.WARNING]))
+      print(" ===[I2]> self.lkas_button_alert   : ", self.lkas_button_alert )
     elif self.CS.lkas_LdwsLHWarning or self.CS.lkas_LdwsRHWarning:
       events.append(create_event('ldwPermanent', [ET.WARNING]))
+      print(" ===[I2]> self.CS.lkas_LdwsLHWarning   : ", self.CS.lkas_LdwsLHWarning )
+      print(" ===[I2]> self.CS.lkas_LdwsRHWarning   : ", self.CS.lkas_LdwsRHWarning )
     
     if ret.cruiseState.enabled != self.cruise_enabled_prev:
         if ret.cruiseState.enabled:
             events.append(create_event('pcmEnable', [ET.ENABLE]))
+            print(" ===[I2]> ret.cruiseState.enabled  : ", ret.cruiseState.enabled )
         else:
             events.append(create_event('pcmDisable', [ET.USER_DISABLE]))
+            print(" ===[I2]> ret.cruiseState.enabled False  : ", ret.cruiseState.enabled )
         self.cruise_enabled_prev = ret.cruiseState.enabled
+        print(" ===[I2]> self.cruise_enabled_prev  : ", self.cruise_enabled_prev )
     elif ret.cruiseState.enabled and ret.gearShifter == GearShifter.drive and self.CS.clu_Vanz > 15:
       events.append(create_event('pcmEnable', [ET.ENABLE]))
+      print(" ===[I2]> ret.gearShifter  : ", ret.gearShifter )
+      print(" ===[I2]> self.CS.clu_Vanz : ", self.CS.clu_Vanz )
     elif  ret.cruiseState.enabled:
         if self.turning_indicator_alert:
           events.append(create_event('turningIndicatorOn', [ET.WARNING]))
+          print(" ===[I2]> self.turning_indicator_alert : ", self.turning_indicator_alert )
         elif self.CC.steer_torque_over:
           events.append(create_event('steerTorqueOver', [ET.WARNING]))          
+          print(" ===[I2]> self.CC.steer_torque_over : ", self.CC.steer_torque_over )
         elif self.CS.stopped:
+          print(" ===[I2]> self.CS.stopped : ", self.CS.stopped )
           if ret.cruiseState.standstill:
+            print(" ===[I2]> ret.cruiseState.standstill True : ", ret.cruiseState.standstill )
             events.append(create_event('resumeRequired', [ET.WARNING]))
           else:
+            print(" ===[I2]> ret.cruiseState.standstill False: ", ret.cruiseState.standstill )
             events.append(create_event('preStoped', [ET.WARNING]))
         #elif self.low_speed_alert and not self.CS.mdps_bus:
         #  events.append(create_event('belowSteerSpeed', [ET.WARNING]))
 
     # disable on pedals rising edge or when brake is pressed and speed isn't zero
+    # (페달 상승 에지에서 또는 브레이크를 밟고 속도가 0이 아닌 경우 비활성화)
+    print(" ===[I2]> self.CC.longcontrol: ", self.CC.longcontrol )
     if self.CC.longcontrol:
       if ((ret.gasPressed and not self.gas_pressed_prev) or (ret.brakePressed and (not self.brake_pressed_prev or ret.vEgoRaw > 0.1))):
+          print(" ===[I2]> ret.gasPressed 1        : ", ret.gasPressed )
+          print(" ===[I2]> self.gas_pressed_prev   : ", self.gas_pressed_prev )
+          print(" ===[I2]> ret.brakePressed        : ", ret.brakePressed )
+          print(" ===[I2]> self.brake_pressed_prev : ", self.brake_pressed_prev )
+          print(" ===[I2]> ret.vEgoRaw             : ", ret.vEgoRaw  )
           events.append(create_event('pedalPressed', [ET.NO_ENTRY, ET.USER_DISABLE]))
       if ret.gasPressed:
+        print(" ===[I2]> ret.gasPressed 2      : ", ret.gasPressed )
         events.append(create_event('pedalPressed', [ET.PRE_ENABLE]))
 
 
-    #TODO Varible for min Speed for LCA
+    # TODO Varible for min Speed for LCA
+    # (LCA의 최소 속도에 대한 변수)
     if ret.rightBlinker and ret.lcaRight and self.CS.v_ego > LaneChangeParms.LANE_CHANGE_SPEED_MIN: 
+      print(" ===[I2]> ret.rightBlinker    : ", ret.rightBlinker )
+      print(" ===[I2]> ret.lcaRight        : ", ret.lcaRight )
+      print(" ===[I2]> self.CS.v_ego       : ", self.CS.v_ego )
+      print(" ===[I2]> LaneChangeParms.LANE_CHANGE_SPEED_MIN : ", LaneChangeParms.LANE_CHANGE_SPEED_MIN )
       events.append(create_event('rightLCAbsm', [ET.WARNING]))
     if ret.leftBlinker and ret.lcaLeft and self.CS.v_ego > LaneChangeParms.LANE_CHANGE_SPEED_MIN: 
+      print(" ===[I2]> ret.rightBlinker    : ", ret.rightBlinker )
+      print(" ===[I2]> ret.lcaLeft         : ", ret.lcaLeft )
+      print(" ===[I2]> self.CS.v_ego       : ", self.CS.v_ego )
+      print(" ===[I2]> LaneChangeParms.LANE_CHANGE_SPEED_MIN : ", LaneChangeParms.LANE_CHANGE_SPEED_MIN )
       events.append(create_event('leftLCAbsm', [ET.WARNING]))
 
     ret.events = events
@@ -475,6 +555,11 @@ class CarInterface(CarInterfaceBase):
     self.gas_pressed_prev = ret.gasPressed
     self.brake_pressed_prev = ret.brakePressed
     #self.log_update( can_strings )
+
+    print(" ===[I2]> ret.events              : ", ret.events )
+    print(" ===[I2]> self.gas_pressed_prev   : ", self.gas_pressed_prev )
+    print(" ===[I2]> self.brake_pressed_prev : ", self.brake_pressed_prev )
+
     return ret.as_reader()
 
   def apply(self, c, sm, LaC ):

@@ -209,7 +209,8 @@ FINGERPRINTS = {
 }
 
 ECU_FINGERPRINT = {
-  Ecu.fwdCamera: [832, 1156, 1191, 1342]
+  # Ecu.fwdCamera: [832, 1156, 1191, 1342, 584, 592]
+  Ecu.fwdCamera: [584, 592]
 }
 
 CHECKSUM = {

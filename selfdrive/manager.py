@@ -158,7 +158,7 @@ managed_processes = {
   #"updated": "selfdrive.updated",
   "dmonitoringmodeld": ("selfdrive/modeld", ["./dmonitoringmodeld"]),
   "modeld": ("selfdrive/modeld", ["./modeld"]),
-  "shutdownd": "selfdrive.shutdownd",
+ # "shutdownd": "selfdrive.shutdownd",
 }
 
 daemon_processes = {

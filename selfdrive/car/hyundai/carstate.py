@@ -9,6 +9,7 @@ import common.log as trace1
 
 GearShifter = car.CarState.GearShifter
 
+# dbc 코드 중 사용할 코드만 정의한다  2020.7.5 HKH
 def get_can_parser(CP):
 
   signals = [
@@ -54,7 +55,7 @@ def get_can_parser(CP):
     ("DriverBraking", "TCS13", 0),
     ("DriverOverride", "TCS13", 0),
 
-    ("ESC_Off_Step", "TCS15", 0),
+    # ("ESC_Off_Step", "TCS15", 0),   2020.7.5 HKH  아래에서 중복되므로 i40용 사용으로 주석처리
 
     ("CF_Lvr_GearInf", "LVR11", 0),        #Transmission Gear (0 = N or P, 1-8 = Fwd, 14 = Rev)
 
@@ -64,11 +65,41 @@ def get_can_parser(CP):
 
     ("CRUISE_LAMP_M", "EMS16", 0),
     ("CRUISE_LAMP_S", "EMS16", 0),
+   
+    ("TQI_MIN", "EMS16", 0),
+    ("TQI", "EMS16", 0),
+    ("TQI_TARGET", "EMS16", 0),
+    ("GLOW_STAT", "EMS16", 0),
+    ("PRE_FUEL_CUT_IN", "EMS16", 0),
+    ("ENG_STAT", "EMS16", 0),
+    ("SOAK_TIME_ERROR", "EMS16", 0),
+    ("SOAK_TIME", "EMS16", 0),
+    ("TQI_MAX", "EMS16", 0),
+    ("SPK_TIME_CUR", "EMS16", 0),
+    ("Checksum", "EMS16", 0),
+    ("AliveCounter", "EMS16", 0),
+    ("CF_Ems_AclAct", "EMS16", 0),
 
-    # ("SCCInfoDisplay", "SCC11", 0),
-    # ("ACC_ObjDist", "SCC11", 0),
-    # ("ACC_ObjRelSpd", "SCC11", 0),
-    # ("Navi_SCC_Camera_Act", "SCC11", 0),
+    ("SCCInfoDisplay", "SCC11", 0),         # 2020.7.5 HKH
+    ("ACC_ObjDist", "SCC11", 0),            # 2020.7.5 HKH
+    ("ACC_ObjRelSpd", "SCC11", 0),          # 2020.7.5 HKH
+    ("Navi_SCC_Camera_Act", "SCC11", 0),    # 2020.7.5 HKH
+
+    ("CF_Clu_DrvSeatBeltSw", "CLU2", 0),    # 2020.7.5 HKH
+    ("ESC_OFF_STEP", "TCS11", 0),           # 2020.7.5 HKH
+    ("CF_Clu_ParkBrakeSw", "CLU1", 0),      # 2020.7.5 HKH
+    ("WHL_SPD_FL", "WHL_SPD", 0),           # 2020.7.5 HKH
+    ("WHL_SPD_FR", "WHL_SPD", 0),           # 2020.7.5 HKH
+    ("WHL_SPD_RL", "WHL_SPD", 0),           # 2020.7.5 HKH
+    ("WHL_SPD_RR", "WHL_SPD", 0),           # 2020.7.5 HKH
+    
+    ("CF_Clu_Vanz", "CLU1", 0),             # 2020.7.5 HKH
+    ("CF_Clu_CruiseSwState", "CLU1", 0),    # 2020.7.5 HKH
+    ("CF_Clu_CruiseSwMain", "CLU1", 0),     # 2020.7.5 HKH
+    ("CF_Clu_SldMainSW", "CLU1", 0),        # 2020.7.5 HKH
+    ("CF_Clu_SPEED_UNIT", "CLU1", 0),       # 2020.7.5 HKH
+
+    ("CR_Mdps_OutTq", "VSM2", 0)
   ]
 
   checks = [
@@ -117,7 +148,7 @@ def get_can_parser(CP):
       ("SCCInfoDisplay", "SCC11", 0),
       ("ACC_ObjDist", "SCC11", 0),
       ("ACC_ObjRelSpd", "SCC11", 0),
-       ("TauGapSet", "SCC11", 0),
+      ("TauGapSet", "SCC11", 0),
       ("Navi_SCC_Camera_Act", "SCC11", 0),
 
       ("CF_VSM_Prefill", "SCC12", 0),
@@ -481,7 +512,6 @@ class CarState():
 
   def update(self, cp, cp2, cp_cam, cp_avm ):
 
-
     cp_mdps = cp2 if self.mdps_bus else cp
     cp_sas = cp2 if self.sas_bus else cp
     cp_scc = cp2 if self.scc_bus == 1 else cp_cam if self.scc_bus == 2 else cp
@@ -493,17 +523,25 @@ class CarState():
     self.prev_right_blinker_flash = self.right_blinker_flash
 
     self.door_all_closed = True
-    self.seatbelt = cp.vl["CGW1"]['CF_Gway_DrvSeatBeltSw']
 
-    self.brake_pressed = cp.vl["TCS13"]['DriverBraking']
-    self.esp_disabled = cp.vl["TCS15"]['ESC_Off_Step']
-    self.park_brake = cp.vl["CGW1"]['CF_Gway_ParkBrakeSw']
+    # self.seatbelt = cp.vl["CGW1"]['CF_Gway_DrvSeatBeltSw']
+    self.seatbelt = cp.vl["CLU2"]['CF_Clu_DrvSeatBeltSw']    # 2020.7.5 HKH i40 dbc로 변경
+    print("=========================> CF_Clu_DrvSeatBeltSw : ", cp.vl["CLU2"]['CF_Clu_DrvSeatBeltSw'])
+    print("=========================> self.seatbelt : ",        self.seatbelt)
 
-    self.Navi_HDA = cp.vl["SCC11"]['Navi_SCC_Camera_Act']   #  Cam Area 2,  Highway 1, normal 0
+    self.brake_pressed = cp.vl["TCS13"]['DriverBraking']     # 2020.7.5 HKH i40 없음
+
+    # self.esp_disabled = cp.vl["TCS15"]['ESC_Off_Step']
+    self.esp_disabled = cp.vl["TCS11"]['ESC_OFF_STEP']       # 2020.7.5 HKH i40 dbc로 변경
+
+    # self.park_brake = cp.vl["CGW1"]['CF_Gway_ParkBrakeSw']
+    self.park_brake = cp.vl["CLU1"]['CF_Clu_ParkBrakeSw']    # 2020.7.5 HKH i40 dbc로 변경
+
+    self.Navi_HDA = cp.vl["SCC11"]['Navi_SCC_Camera_Act']   #  Cam Area 2,  Highway 1, normal 0  (2020.7.5 HKH i40 없음)
 
 
-    # AVM
-    self.AVM_View = cp_avm.vl["AVM_HU_PE_00"]["AVM_View"]
+    # AVM  (2020.7.5 HKH i40 없음)
+    self.AVM_View = cp_avm.vl["AVM_HU_PE_00"]["AVM_View"]                             
     self.AVM_ParkAssist_btn = cp_avm.vl["AVM_HU_PE_00"]["AVM_ParkingAssist_BtnSts"]
     self.AVM_Disp_Msg = cp_avm.vl["AVM_HU_PE_00"]["AVM_Display_Message"]
     self.AVM_Popup_Msg = cp_avm.vl["AVM_HU_PE_00"]["AVM_Popup_Msg"]
@@ -516,37 +554,76 @@ class CarState():
     self.AVM_HU_FrontView = cp_avm.vl["AVM_HU_PE_00"]["AVM_HU_FrontView_Option"]
     self.AVM_Version = cp_avm.vl["AVM_HU_PE_00"]["AVM_Version"]
 
-
     self.main_on = cp.vl['EMS16']['CRUISE_LAMP_M']  #(cp_scc.vl["SCC11"]["MainMode_ACC"] != 0) if not self.no_radar else \
                                                     #                         cp.vl['EMS16']['CRUISE_LAMP_M']
     self.acc_active = cp.vl['EMS16']['CRUISE_LAMP_M'] #(cp_scc.vl["SCC12"]['ACCMode'] != 0) if not self.no_radar else \
                                                       #                (cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0)
     self.cruise_set = cp.vl['EMS16']['CRUISE_LAMP_S']  
+    
+    #print(" ============================> carstate START....")
+    #print(" ===[state]> CRUISE_LAMP_M            :", cp.vl['EMS16']['CRUISE_LAMP_M'] )
+    #print(" ===[state]> CRUISE_LAMP_S            :", cp.vl['EMS16']['CRUISE_LAMP_S'] )
+    #print(" ===[state]> TQI_MIN                  :", cp.vl['EMS16']['TQI_MIN'] )
+    #print(" ===[state]> TQI                      :", cp.vl['EMS16']['TQI'] )
+    #print(" ===[state]> TQI_TARGET               :", cp.vl['EMS16']['TQI_TARGET'] )
+    #print(" ===[state]> GLOW_STAT                :", cp.vl['EMS16']['GLOW_STAT'] )
+    #print(" ===[state]> PRE_FUEL_CUT_IN          :", cp.vl['EMS16']['PRE_FUEL_CUT_IN'] )
+    #print(" ===[state]> ENG_STAT                 :", cp.vl['EMS16']['ENG_STAT'] )
+    #print(" ===[state]> SOAK_TIME_ERROR          :", cp.vl['EMS16']['SOAK_TIME_ERROR'] )
+    #print(" ===[state]> SOAK_TIME                :", cp.vl['EMS16']['SOAK_TIME'] )
+    #print(" ===[state]> TQI_MAX                  :", cp.vl['EMS16']['TQI_MAX'] )
+    #print(" ===[state]> SPK_TIME_CUR             :", cp.vl['EMS16']['SPK_TIME_CUR'] )
+    #print(" ===[state]> Checksum                 :", cp.vl['EMS16']['Checksum'] )
+    #print(" ===[state]> AliveCounter             :", cp.vl['EMS16']['AliveCounter'] )
+    #print(" ===[state]> CF_Ems_AclAct            :", cp.vl['EMS16']['CF_Ems_AclAct'] )
+    #print(" ===[state]> self.main_on             :", self.main_on        )
+    #print(" ===[state]> self.acc_active          :", self.acc_active   )
+    #print(" ===[state]> self.cruise_set          :", self.cruise_set            )
 
     self.pcm_acc_status = int(self.acc_active)
 
-    self.v_wheel_fl = cp.vl["WHL_SPD11"]['WHL_SPD_FL'] * CV.KPH_TO_MS
-    self.v_wheel_fr = cp.vl["WHL_SPD11"]['WHL_SPD_FR'] * CV.KPH_TO_MS
-    self.v_wheel_rl = cp.vl["WHL_SPD11"]['WHL_SPD_RL'] * CV.KPH_TO_MS
-    self.v_wheel_rr = cp.vl["WHL_SPD11"]['WHL_SPD_RR'] * CV.KPH_TO_MS
+    # self.v_wheel_fl = cp.vl["WHL_SPD11"]['WHL_SPD_FL'] * CV.KPH_TO_MS
+    # self.v_wheel_fr = cp.vl["WHL_SPD11"]['WHL_SPD_FR'] * CV.KPH_TO_MS
+    # self.v_wheel_rl = cp.vl["WHL_SPD11"]['WHL_SPD_RL'] * CV.KPH_TO_MS
+    # self.v_wheel_rr = cp.vl["WHL_SPD11"]['WHL_SPD_RR'] * CV.KPH_TO_MS
+    self.v_wheel_fl = cp.vl["WHL_SPD"]['WHL_SPD_FL'] * CV.KPH_TO_MS  # 2020.7.5 HKH i40 dbc로 변경
+    self.v_wheel_fr = cp.vl["WHL_SPD"]['WHL_SPD_FR'] * CV.KPH_TO_MS  # 2020.7.5 HKH i40 dbc로 변경
+    self.v_wheel_rl = cp.vl["WHL_SPD"]['WHL_SPD_RL'] * CV.KPH_TO_MS  # 2020.7.5 HKH i40 dbc로 변경
+    self.v_wheel_rr = cp.vl["WHL_SPD"]['WHL_SPD_RR'] * CV.KPH_TO_MS  # 2020.7.5 HKH i40 dbc로 변경
+
     self.v_ego_raw = (self.v_wheel_fl + self.v_wheel_fr + self.v_wheel_rl + self.v_wheel_rr) / 4.
     v_ego, self.a_ego = self.update_speed_kf(self.v_ego_raw)
 
     self.low_speed_lockout = self.v_ego_raw < 1.0
 
+    #  print(" ===[state]> self.v_wheel_fl          :", self.v_wheel_fl  )     
+    #  print(" ===[state]> self.v_wheel_fr          :", self.v_wheel_fr  )     
+    #  print(" ===[state]> self.v_wheel_rl          :", self.v_wheel_rl  )     
+    #  print(" ===[state]> self.v_wheel_rr          :", self.v_wheel_rr  )     
+    #  print(" ===[state]> self.v_ego_raw           :", self.v_ego_raw  )      
+    #  print(" ===[state]> self.a_ego               :", self.a_ego    )        
+    #  print(" ===[state]> self.low_speed_lockout   :", self.low_speed_lockout )
 
-
-    self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
-    self.clu_CruiseSwState = cp.vl["CLU11"]["CF_Clu_CruiseSwState"]
-    self.clu_CruiseSwMain = cp.vl["CLU11"]["CF_Clu_CruiseSwMain"]
-    self.clu_SldMainSW = cp.vl["CLU11"]["CF_Clu_SldMainSW"]
+    # self.clu_Vanz = cp.vl["CLU11"]["CF_Clu_Vanz"]
+    # self.clu_CruiseSwState = cp.vl["CLU11"]["CF_Clu_CruiseSwState"]
+    # self.clu_CruiseSwMain = cp.vl["CLU11"]["CF_Clu_CruiseSwMain"]
+    # self.clu_SldMainSW = cp.vl["CLU11"]["CF_Clu_SldMainSW"]
+    self.clu_Vanz = cp.vl["CLU1"]["CF_Clu_Vanz"]                         # 2020.7.5 HKH i40 dbc로 변경
+    self.clu_CruiseSwState = cp.vl["CLU1"]["CF_Clu_CruiseSwState"]       # 2020.7.5 HKH i40 dbc로 변경
+    self.clu_CruiseSwMain = cp.vl["CLU1"]["CF_Clu_CruiseSwMain"]         # 2020.7.5 HKH i40 dbc로 변경
+    self.clu_SldMainSW = cp.vl["CLU1"]["CF_Clu_SldMainSW"]               # 2020.7.5 HKH i40 dbc로 변경
     self.v_ego = self.clu_Vanz * CV.KPH_TO_MS
 
     #self.VSetDis = cp_scc.vl["SCC11"]['VSetDis']
 
+    #  print(" ===[state]> self.clu_Vanz            :", self.clu_Vanz           )
+    #  print(" ===[state]> self.clu_CruiseSwState   :", self.clu_CruiseSwState  )
+    #  print(" ===[state]> self.clu_CruiseSwMain    :", self.clu_CruiseSwMain   )
+    #  print(" ===[state]> self.clu_SldMainSW       :", self.clu_SldMainSW      )
+    #  print(" ===[state]> self.v_ego               :", self.v_ego             )
 
-
-    self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])
+    # self.is_set_speed_in_mph = int(cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"])  
+    self.is_set_speed_in_mph = int(cp.vl["CLU1"]["CF_Clu_SPEED_UNIT"])  # 2020.7.5 HKH i40 dbc로 변경
     speed_conv = CV.MPH_TO_MS if self.is_set_speed_in_mph else CV.KPH_TO_MS
     #self.cruise_set_speed = self.VSetDis * speed_conv if not self.no_radar else \
     #                                     (cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv)
@@ -556,23 +633,35 @@ class CarState():
     self.standstill = not self.v_ego_raw > 0.1
 
 
-    self.steer_torque_driver = cp_mdps.vl["MDPS12"]['CR_Mdps_StrColTq']
-    self.steer_torque_motor = cp_mdps.vl["MDPS12"]['CR_Mdps_OutTq']
+    self.steer_torque_driver = cp_mdps.vl["MDPS12"]['CR_Mdps_StrColTq']     # 2020.7.5 HKH i40 없음
+    # self.steer_torque_motor = cp_mdps.vl["MDPS12"]['CR_Mdps_OutTq']
+    self.steer_torque_motor = cp_mdps.vl["VSM2"]['CR_Mdps_OutTq']           # 2020.7.5 HKH i40 dbc로 변경
 
     self.angle_steers = cp_sas.vl["SAS11"]['SAS_Angle'] - 0
     self.angle_steers_rate = cp_sas.vl["SAS11"]['SAS_Speed']
     self.yaw_rate = cp.vl["ESP12"]['YAW_RATE']
-    self.left_blinker_on = cp.vl["CGW1"]['CF_Gway_TSigLHSw']
+    self.left_blinker_on = cp.vl["CGW1"]['CF_Gway_TSigLHSw']                # 2020.7.5 HKH i40 없음
     self.left_blinker_flash = cp.vl["CGW1"]['CF_Gway_TurnSigLh']
-    self.right_blinker_on = cp.vl["CGW1"]['CF_Gway_TSigRHSw']
+    self.right_blinker_on = cp.vl["CGW1"]['CF_Gway_TSigRHSw']               # 2020.7.5 HKH i40 없음
     self.right_blinker_flash = cp.vl["CGW1"]['CF_Gway_TurnSigRh']
     self.steer_override = abs(self.steer_torque_driver) > STEER_THRESHOLD
-    self.steer_state = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiActive'] #0 NOT ACTIVE, 1 ACTIVE
-    self.steer_error = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail']
+    self.steer_state = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiActive'] #0 NOT ACTIVE, 1 ACTIVE   # 2020.7.5 HKH i40 없음
+    self.steer_error = cp_mdps.vl["MDPS12"]['CF_Mdps_ToiUnavail']           # 2020.7.5 HKH i40 없음
     self.brake_error = 0
 
-    print("===> DriverOverride : ", cp.vl["TCS13"]["DriverOverride"])
-    self.driverOverride = cp.vl["TCS13"]["DriverOverride"]     # 1 Acc,  2 bracking, 0 Normal  2020-07-04  HKH
+    #print(" ===[state]> self.angle_steers        :", self.angle_steers        )
+    #print(" ===[state]> self.angle_steers_rate   :", self.angle_steers_rate   )
+    #print(" ===[state]> self.yaw_rate            :", self.yaw_rate            )
+    #print(" ===[state]> self.left_blinker_on     :", self.left_blinker_on     )
+    #print(" ===[state]> self.left_blinker_flash  :", self.left_blinker_flash  )
+    #print(" ===[state]> self.right_blinker_on    :", self.right_blinker_on    )
+    #print(" ===[state]> self.right_blinker_flash :", self.right_blinker_flash )
+    #print(" ===[state]> self.steer_override      :", self.steer_override      )
+    #print(" ===[state]> self.steer_state         :", self.steer_state         )
+    #print(" ===[state]> self.steer_error         :", self.steer_error         )
+    #print(" ===[state]> self.brake_error         :", self.brake_error         )
+
+    self.driverOverride = cp.vl["TCS13"]["DriverOverride"]     # 1 Acc,  2 bracking, 0 Normal  # 2020.7.5 HKH i40 없음
 
     #운전자 개입
     if self.driverOverride == 1:
@@ -583,31 +672,16 @@ class CarState():
     if self.driverAcc_time:
       self.driverAcc_time -= 1
 
-    print("===> SCCInfoDisplay : ", cp_scc.vl["SCC11"]['SCCInfoDisplay'])
-    print("===> ACC_ObjDist : ", cp_scc.vl["SCC11"]['ACC_ObjDist'])
-    print("===> ACC_ObjRelSpd : ", cp_scc.vl["SCC11"]['ACC_ObjRelSpd'])
-
-    self.sccInfoDisp = cp_scc.vl["SCC11"]['SCCInfoDisplay']
-    print("===> sccInfoDisp : ", self.sccInfoDisp)
-
+    self.sccInfoDisp = cp_scc.vl["SCC11"]['SCCInfoDisplay']                                # 2020.7.5 HKH i40 없음
     self.stopped = self.sccInfoDisp == 4. if not self.no_radar else False
-    print("===> stopped : ", self.stopped)
-    print("===> no_radar : ", self.no_radar)
-
-    self.lead_distance = cp_scc.vl["SCC11"]['ACC_ObjDist'] if not self.no_radar else 0
-    print("===> lead_distance : ", self.lead_distance)
-
-    self.lead_objspd = cp_scc.vl["SCC11"]['ACC_ObjRelSpd'] if not self.no_radar else 0
-    print("===> lead_objspd : ", self.lead_objspd)
-
+    self.lead_distance = cp_scc.vl["SCC11"]['ACC_ObjDist'] if not self.no_radar else 0     # 2020.7.5 HKH i40 없음
+    self.lead_objspd = cp_scc.vl["SCC11"]['ACC_ObjRelSpd'] if not self.no_radar else 0     # 2020.7.5 HKH i40 없음
     self.lead_objspd = self.lead_objspd * CV.MS_TO_KPH
-    print("===> lead_objspd : ", self.lead_objspd)
-
     self.user_brake = 0
 
-    self.brake_pressed = cp.vl["TCS13"]['DriverBraking']
-    self.brake_lights = bool(cp.vl["TCS13"]['BrakeLight'] or self.brake_pressed)
-    if (self.driverOverride == 0 and cp.vl["TCS13"]['ACC_REQ'] == 1):
+    self.brake_pressed = cp.vl["TCS13"]['DriverBraking']                                   # 2020.7.5 HKH i40 없음
+    self.brake_lights = bool(cp.vl["TCS13"]['BrakeLight'] or self.brake_pressed)           # 2020.7.5 HKH i40 없음
+    if (self.driverOverride == 0 and cp.vl["TCS13"]['ACC_REQ'] == 1):                      # 2020.7.5 HKH i40 없음
       self.pedal_gas = 0
     else:
       self.pedal_gas = cp.vl["EMS12"]['TPS']
@@ -664,17 +738,27 @@ class CarState():
         self.gear_shifter = GearShifter.drive # fixed by KYD to resolve "Gear not D" issue
 
 
-    self.lkas_LdwsLHWarning = cp_cam.vl["LKAS11"]["CF_Lkas_LdwsLHWarning"]
-    self.lkas_LdwsRHWarning = cp_cam.vl["LKAS11"]["CF_Lkas_LdwsRHWarning"]
-    self.lkas_LdwsSysState = cp_cam.vl["LKAS11"]["CF_Lkas_LdwsSysState"]   # 16 over steer
+    self.lkas_LdwsLHWarning = cp_cam.vl["LKAS11"]["CF_Lkas_LdwsLHWarning"]                   # 2020.7.5 HKH i40 없음
+    self.lkas_LdwsRHWarning = cp_cam.vl["LKAS11"]["CF_Lkas_LdwsRHWarning"]                   # 2020.7.5 HKH i40 없음
+    self.lkas_LdwsSysState = cp_cam.vl["LKAS11"]["CF_Lkas_LdwsSysState"]   # 16 over steer   # 2020.7.5 HKH i40 없음
     self.lkas_button_on = 7 > self.lkas_LdwsSysState != 0
     self.lkas_error = self.lkas_LdwsSysState == 7
 
-    # Blind Spot Detection and Lane Change Assist signals
-    self.lca_state = cp.vl["LCA11"]["CF_Lca_Stat"]
-    self.lca_left = cp.vl["LCA11"]["CF_Lca_IndLeft"]
-    self.lca_right = cp.vl["LCA11"]["CF_Lca_IndRight"]
+    # print(" ===[state]> self.lkas_LdwsLHWarning  :", self.lkas_LdwsLHWarning  )
+    # print(" ===[state]> self.lkas_LdwsRHWarning  :", self.lkas_LdwsRHWarning  )
+    # print(" ===[state]> self.lkas_LdwsSysState   :", self.lkas_LdwsSysState   )
+    # print(" ===[state]> self.lkas_button_on      :", self.lkas_button_on      )
+    # print(" ===[state]> self.lkas_error          :", self.lkas_error          )
 
+
+    # Blind Spot Detection and Lane Change Assist signals
+    self.lca_state = cp.vl["LCA11"]["CF_Lca_Stat"]                                        # 2020.7.5 HKH i40 없음
+    self.lca_left = cp.vl["LCA11"]["CF_Lca_IndLeft"]                                      # 2020.7.5 HKH i40 없음
+    self.lca_right = cp.vl["LCA11"]["CF_Lca_IndRight"]                                    # 2020.7.5 HKH i40 없음
+
+    # print(" ===[state]> self.lca_state           :", self.lca_state          )
+    # print(" ===[state]> self.lca_left            :", self.lca_left           )
+    # print(" ===[state]> self.lca_right           :", self.lca_right          )
 
 
     # save the entire LKAS11, CLU11, SCC12 and MDPS12
@@ -684,7 +768,14 @@ class CarState():
     self.mdps12 = cp_mdps.vl["MDPS12"]
     self.cgw1 = cp.vl["CGW1"]
     self.avm = cp_avm.vl["AVM_HU_PE_00"]  
-  
+
+    # print(" ===[state]> self.lkas11              :", self.lkas11          )    
+    # print(" ===[state]> self.clu11               :", self.clu11           )     
+    # print(" ===[state]> self.scc12               :", self.scc12           )    
+    # print(" ===[state]> self.mdps12              :", self.mdps12          )    
+    # print(" ===[state]> self.cgw1                :", self.cgw1            )    
+    # print(" ===[state]> self.avm                 :", self.avm             )    
+
     # blinker process
     blinker_status = 0
     if self.left_blinker_flash and self.right_blinker_flash:

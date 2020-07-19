@@ -439,7 +439,7 @@ BO_ 897 MDPS11: 8 MDPS
  SG_ CF_Mdps_Flex : 2|3@1+ (1.0,0.0) [0.0|3.0] ""  CLU,LDWS_LKAS
  SG_ CF_Mdps_FlexDisp : 5|1@1+ (1.0,0.0) [0.0|1.0] ""  CLU
  SG_ CF_Mdps_Stat : 7|4@1+ (1.0,0.0) [0.0|15.0] ""  SPAS
- SG_ CR_Mdps_DrvTq : 11|12@1+ (1.0,-2048.0) [-2048.0|2046.0] ""  SPAS
+ SG_ CR_Mdps_DrvTq : 11|12@1+ (0.01,-20.48) [-20.48|20.46] ""  SPAS
  SG_ CF_Mdps_ALTRequest : 23|1@1+ (1.0,0.0) [0.0|1.0] ""  EMS
  SG_ CR_Mdps_StrAng : 24|16@1- (0.1,0.0) [-3276.8|3276.7] "Deg"  SPAS
  SG_ CF_Mdps_AliveCnt : 40|8@1+ (1.0,0.0) [0.0|255.0] ""  LDWS_LKAS,SPAS
@@ -691,11 +691,7 @@ BO_ 1365 FPCM11: 8 FPCM
  SG_ CF_Fpcm_PreSnrSigErr : 14|1@1+ (1.0,0.0) [0.0|1.0] ""  EMS
  SG_ CF_Fpcm_LPCtrCirFlt : 15|1@1+ (1.0,0.0) [0.0|1.0] ""  EMS
 
-BO_ 871 LVR12: 8 LVR
- SG_ CF_Lvr_CruiseSet : 0|8@1+ (1.0,0.0) [0.0|255.0] "" CLU,TCU
- SG_ CF_Lvr_Gear : 32|4@1+ (1.0,0.0) [0.0|15.0] ""  CLU,TCU
-
-BO_ 872 LVR11: 8 LVR
+BO_ 852 LVR11: 7 LVR
  SG_ CF_Lvr_GearInf : 0|4@1+ (1.0,0.0) [0.0|15.0] ""  CLU,TCU
  SG_ CF_Lvr_PRelStat : 4|1@1+ (1.0,0.0) [0.0|1.0] ""  BCM,CLU,SMK,TCU
  SG_ CF_Lvr_BkeAct : 5|1@1+ (1.0,0.0) [0.0|1.0] ""  TCU
@@ -779,7 +775,7 @@ BO_ 339 TCS11: 8 ESC
  SG_ TQI_MSR : 32|8@1+ (0.390625,0.0) [0.0|99.609375] "%"  EMS,EPB,TCU
  SG_ TQI_SLW_TCS : 40|8@1+ (0.390625,0.0) [0.0|99.609375] "%"  EMS,EPB,TCU
  SG_ CF_Esc_BrkCtl : 48|1@1+ (1.0,0.0) [0.0|1.0] ""  EMS
- SG_ ESC_OFF_STEP : 49|2@1+ (1.0,0.0) [0.0|3.0] ""  BCM,CGW,CLU
+ SG_ BLA_CTL : 49|2@1+ (1.0,0.0) [0.0|3.0] ""  BCM,CGW,CLU
  SG_ AliveCounter_TCS1 : 52|4@1+ (1.0,0.0) [0.0|14.0] ""  EMS,EPB,LDWS_LKAS
  SG_ CheckSum_TCS1 : 56|8@1+ (1.0,0.0) [0.0|255.0] ""  EMS,EPB,LDWS_LKAS
 
@@ -792,7 +788,7 @@ BO_ 1362 SNV11: 4 SNV
  SG_ CF_Snv_IRLampControl : 10|2@1+ (1.0,0.0) [0.0|3.0] ""  BCM,CLU,HUD
 
 BO_ 593 MDPS12: 8 MDPS
- SG_ CR_Mdps_StrColTq : 0|11@1+ (1.0,-1024.0) [-1024.0|1024.0] ""  LDWS_LKAS
+ SG_ CR_Mdps_StrColTq : 0|11@1+ (0.0078125,-8.0) [-8.0|7.9921875] "Nm"  LDWS_LKAS
  SG_ CF_Mdps_Def : 11|1@1+ (1.0,0.0) [0.0|1.0] ""  ESC
  SG_ CF_Mdps_ToiUnavail : 12|1@1+ (1.0,0.0) [0.0|1.0] ""  LDWS_LKAS
  SG_ CF_Mdps_ToiActive : 13|1@1+ (1.0,0.0) [0.0|1.0] ""  LDWS_LKAS
@@ -897,11 +893,11 @@ BO_ 67 DATC13: 8 DATC
 
 BO_ 66 DATC12: 8 DATC
  SG_ CR_Datc_DrTempDispC : 0|8@1+ (0.5,14.0) [15.0|32.0] "deg"  CLU,IBOX
- SG_ CR_Datc_DrTempDispF : 8|8@1+ (1.0,56.0) [58.0|90.0] "deg"  CLU,IBOX
+ SG_ CR_Datc_DrTempDispF : 8|8@1+ (1.0,56.0) [58.0|90.0] ""  CLU,IBOX
  SG_ CR_Datc_PsTempDispC : 16|8@1+ (0.5,14.0) [15.0|32.0] "deg"  CLU,IBOX
- SG_ CR_Datc_PsTempDispF : 24|8@1+ (1.0,56.0) [58.0|90.0] "deg"  CLU,IBOX
+ SG_ CR_Datc_PsTempDispF : 24|8@1+ (1.0,56.0) [58.0|90.0] ""  CLU,IBOX
  SG_ CR_Datc_RearDrTempDispC : 40|8@1+ (0.5,14.0) [15.0|32.0] "deg"  CLU
- SG_ CR_Datc_RearDrTempDispF : 48|8@1+ (1.0,58.0) [58.0|90.0] "deg"  CLU
+ SG_ CR_Datc_RearDrTempDispF : 48|8@1+ (1.0,58.0) [58.0|90.0] ""  CLU
  SG_ CF_Datc_CO2_Warning : 56|8@1+ (1.0,0.0) [0.0|3.0] ""  CLU
 
 BO_ 1345 CGW1: 8 BCM
@@ -961,19 +957,18 @@ BO_ 64 DATC14: 8 DATC
  SG_ DATC_ADSDisp : 28|2@1+ (1.0,0.0) [0.0|3.0] ""  CLU
 
 BO_ 832 LKAS11: 8 LDWS_LKAS
- SG_ CF_Lkas_Bca_R : 0|2@1+ (1.0,0.0) [0.0|3.0] ""  CLU,IBOX,PSB
  SG_ CF_Lkas_LdwsSysState : 2|4@1+ (1.0,0.0) [0.0|15.0] ""  CLU,IBOX,PSB
  SG_ CF_Lkas_SysWarning : 6|4@1+ (1.0,0.0) [0.0|15.0] ""  BCM,CLU
  SG_ CF_Lkas_LdwsLHWarning : 10|2@1+ (1.0,0.0) [0.0|3.0] ""  BCM,CLU,PSB
  SG_ CF_Lkas_LdwsRHWarning : 12|2@1+ (1.0,0.0) [0.0|3.0] ""  BCM,CLU,PSB
  SG_ CF_Lkas_HbaLamp : 14|1@1+ (1.0,0.0) [0.0|1.0] ""  CLU
  SG_ CF_Lkas_FcwBasReq : 15|1@1+ (1.0,0.0) [0.0|1.0] ""  ABS,ESC
- SG_ CR_Lkas_StrToqReq : 16|11@1+ (1.0,-1024.0) [-1024.0|1024.0] ""  MDPS
+ SG_ CR_Lkas_StrToqReq : 16|11@1+ (0.0078125,-8.0) [-8.0|8.0] "Nm"  MDPS
  SG_ CF_Lkas_ActToi : 27|1@1+ (1.0,0.0) [0.0|1.0] ""  MDPS
  SG_ CF_Lkas_ToiFlt : 28|1@1+ (1.0,0.0) [0.0|1.0] ""  MDPS
  SG_ CF_Lkas_HbaSysState : 29|3@1+ (1.0,0.0) [0.0|7.0] ""  BCM,CLU
  SG_ CF_Lkas_FcwOpt : 32|2@1+ (1.0,0.0) [0.0|3.0] ""  CLU
- SG_ CF_Lkas_HbaOpt : 34|2@1+ (1.0,0.0) [0.0|1.0] ""  BCM,CGW
+ SG_ CF_Lkas_HbaOpt : 34|1@1+ (1.0,0.0) [0.0|1.0] ""  BCM,CGW
  SG_ CF_Lkas_MsgCount : 36|4@1+ (1.0,0.0) [0.0|15.0] ""  CLU,MDPS
  SG_ CF_Lkas_FcwSysState : 40|3@1+ (1.0,0.0) [0.0|7.0] ""  CLU
  SG_ CF_Lkas_FcwCollisionWarning : 43|2@1+ (1.0,0.0) [0.0|3.0] ""  CLU
@@ -981,8 +976,6 @@ BO_ 832 LKAS11: 8 LDWS_LKAS
  SG_ CF_Lkas_Chksum : 48|8@1+ (1.0,0.0) [0.0|255.0] ""  MDPS
  SG_ CF_Lkas_FcwOpt_USM : 56|3@1+ (1.0,0.0) [0.0|7.0] ""  CLU
  SG_ CF_Lkas_LdwsOpt_USM : 59|3@1+ (1.0,0.0) [0.0|7.0] ""  CLU,MDPS
- SG_ CF_Lkas_Unknown1 : 47|1@1+ (1,0) [0|3] "" XXX
- SG_ CF_Lkas_Unknown2 : 63|2@0+ (1,0) [0|3] "" XXX
 
 BO_ 1342 LKAS12: 6 LDWS_LKAS
  SG_ CF_Lkas_TsrSlifOpt : 10|2@1+ (1.0,0.0) [0.0|3.0] ""  CLU
@@ -1421,94 +1414,3 @@ BO_ 512 EMS20: 6 EMS
  SG_ FCO : 0|16@1+ (0.128,0.0) [0.0|8388.48] "ul"  CLU,CUBIS,FPCM,IBOX
  SG_ CF_Ems_PumpTPres : 16|8@1+ (3.137254902,0.0) [0.0|800.0] "kPa"  FPCM,IBOX
  SG_ Split_Stat : 32|1@1+ (1.0,0.0) [0.0|1.0] ""  FPCM
-
-BO_ 909 FCA11: 8 FCA
- SG_ CF_VSM_Prefill : 0|1@1+ (1,0) [0|1] ""  ESC
- SG_ CF_VSM_HBACmd : 1|2@1+ (1,0) [0|3] ""  ESC
- SG_ CF_VSM_Warn : 3|2@1+ (1,0) [0|3] ""  ACU,CLU,ESC
- SG_ CF_VSM_BeltCmd : 5|3@1+ (1,0) [0|7] ""  ESC
- SG_ CR_VSM_DecCmd : 8|8@1+ (0.01,0) [0|2.55] "g"  ESC
- SG_ FCA_Status : 18|2@1+ (1,0) [0|3] ""  ACU,CLU,ESC
- SG_ FCA_CmdAct : 20|1@1+ (1,0) [0|1] ""  ESC
- SG_ FCA_StopReq : 21|1@1+ (1,0) [0|1] ""  CLU,ESC
- SG_ FCA_DrvSetStatus : 22|3@1+ (1,0) [0|7] ""  CLU,ESC
- SG_ CF_VSM_DecCmdAct : 31|1@1+ (1,0) [0|1] ""  ESC
- SG_ FCA_Failinfo : 32|3@1+ (1,0) [0|7] ""  ACU,CLU,ESC
- SG_ CR_FCA_Alive : 56|4@1+ (1,0) [0|15] ""  ESC
- SG_ CR_FCA_ChkSum : 60|4@1+ (1,0) [0|15] ""  ESC
-
-BO_ 905 SCC14: 8 SCC
- SG_ ComfortBandUpper : 0|6@1+ (0.02,0) [0|1.26] "m/s^2"  ESC
- SG_ ComfortBandLower : 6|6@1+ (0.02,0) [0|1.26] "m/s^2"  ESC
- SG_ JerkUpperLimit : 12|7@1+ (0.1,0) [0|12.7] "m/s^3"  ESC
- SG_ JerkLowerLimit : 19|7@1+ (0.1,0) [0|12.7] "m/s^3"  ESC
- SG_ SCCMode : 32|3@1+ (1,0) [0|7] ""  ESC
-
-BO_ 882 ELECT_GEAR: 8 XXX
- SG_ Elect_Gear_Shifter : 16|3@1+ (1,0) [0|7] ""  CLU
-
-BO_ 1680 CLU2: 8 XXX
-    SG_ CF_Clu_IGNSw : 0|3@1+ (1.0,0.0) [0.0|7.0] "" XXX
-    SG_ RKE_CMD : 3|3@1+ (1.0,0.0) [0.0|7.0] "" XXX
-    SG_ CF_Clu_DrvDrSw : 6|2@1+ (1.0,0.0) [0.0|3.0] "" XXX
-    SG_ CF_Clu_DrvKeyLockSw : 8|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_DrvKeyUnlockSw : 9|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ PIC_Lock : 10|3@1+ (1.0,0.0) [0.0|7.0] "" XXX
-    SG_ PIC_Unlock : 13|3@1+ (1.0,0.0) [0.0|7.0] "" XXX
-    SG_ CF_Clu_DrvSeatBeltSw : 16|2@1+ (1.0,0.0) [0.0|3.0] "" XXX
-    SG_ CF_Clu_TrunkTgSw : 18|2@1+ (1.0,0.0) [0.0|3.0] "" XXX
-    SG_ CF_Clu_AstSeatBeltSw : 20|2@1+ (1.0,0.0) [0.0|3.0] "" XXX
-    SG_ CF_Clu_HoodSw : 22|2@1+ (1.0,0.0) [0.0|3.0] "" XXX
-    SG_ CF_Clu_TurnSigLh : 24|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_TurnSigRh : 25|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_LdwsLkasSW : 26|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_WiperIntT : 27|3@1+ (1.0,0.0) [0.0|7.0] "" XXX
-    SG_ CF_Clu_WiperIntSW : 30|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_WiperLow : 31|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_WiperHigh : 32|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_WiperAuto : 33|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_RainSnsStat : 34|3@1+ (1.0,0.0) [0.0|7.0] "" XXX
-    SG_ CF_Clu_HeadLampLow : 37|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_HeadLampHigh : 38|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_AltLStatus : 39|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_EcoDriveInf : 40|3@1+ (1.0,0.0) [0.0|7.0] "" XXX
-    SG_ CF_Clu_SwiGearR : 43|2@1+ (1.0,0.0) [0.0|3.0] "" XXX
-    SG_ CF_Clu_SWL_Stat : 45|3@1+ (1.0,0.0) [0.0|7.0] "" XXX
-    SG_ CF_Clu_ActiveEcoSW : 48|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_HazardSW : 49|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_AliveCnt2 : 50|4@1+ (1.0,0.0) [0.0|15.0] "" XXX
-    SG_ CF_Clu_AstDrSw : 54|2@1+ (1.0,0.0) [0.0|3.0] "" XXX
-    SG_ CF_Clu_LkasDispMode : 56|2@1+ (1.0,0.0) [0.0|3.0] "" XXX
-    SG_ CF_Clu_AutoLightLevel : 58|2@1+ (1.0,0.0) [0.0|3.0] "" XXX
-    SG_ CF_Clu_SunRoofOpenState : 60|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-
-BO_ 1264 CLU1: 8 XXX
-    SG_ CF_Clu_CruiseSwState : 0|3@1+ (1.0,0.0) [0.0|7.0] "" XXX
-    SG_ CF_Blr_MaxStat : 3|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_SldMainSW : 4|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_ParityBit1 : 5|1@1+ (1.0,0.0) [0.0|1.0] "pulse count" XXX
-    SG_ CF_Clu_SPEED_UNIT : 6|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_ParkBrakeSw : 7|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_Vanz : 8|9@1+ (0.5,0.0) [0.0|255.5] "km/h or MPH" XXX
-    SG_ CF_Clu_AliveCounter : 17|7@1+ (1.0,0.0) [0.0|127.0] "" XXX
-    SG_ CF_Clu_CruiseSwMain : 24|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_VanzDecimal : 25|2@1+ (1.0,0.0) [0.0|0.375] "" XXX
-    SG_ VEHICLE_INFO : 27|3@1+ (1.0,0.0) [0.0|7.0] "" XXX
-    SG_ CF_Clu_StrRlyState : 30|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Clu_SMKOption : 31|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ R_TqAcnOutC : 32|8@1+ (1.0,0.0) [0.0|51.0] "Nm" XXX
-    SG_ CF_Clu_Odometer : 40|24@1+ (0.1,0) [0.0|1.67772e+006] "km" XXX
-
-BO_ 1200 WHL_SPD: 8 XXX
-    SG_ WHL_SPD_FL : 0|14@1+ (0.03125,0.0) [0.0|511.969] "km/h" XXX
-    SG_ WHL_SPD_FR : 16|14@1+ (0.03125,0.0) [0.0|511.969] "km/h" XXX
-    SG_ WHL_SPD_RL : 32|14@1+ (0.03125,0.0) [0.0|511.969] "km/h" XXX
-    SG_ WHL_SPD_RR : 48|14@1+ (0.03125,0.0) [0.0|511.969] "km/h" XXX
-
-BO_ 357 VSM2: 8 XXX
-    SG_ CR_Mdps_StrTq : 0|12@1+ (0.01,-20.48) [-20.48|20.47] "Nm" XXX
-    SG_ CR_Mdps_OutTq : 12|12@1+ (0.1,-204.8) [-204.8|204.7] "" XXX
-    SG_ CF_Mdps_Def : 24|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Mdps_SErr : 25|1@1+ (1.0,0.0) [0.0|1.0] "" XXX
-    SG_ CF_Mdps_AliveCnt : 48|4@1+ (1.0,0.0) [0.0|15.0] "" XXX
-    SG_ CF_Mdps_Chksum : 56|8@1+ (1.0,0.0) [0.0|255.0] "" XXX

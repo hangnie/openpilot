@@ -15,8 +15,10 @@ class AlertManager():
   def __init__(self):
     self.activealerts = []
     self.alerts = {alert.alert_type: alert for alert in ALERTS}
+    print("--1--")
 
   def alertPresent(self):
+    print("--2--")
     return len(self.activealerts) > 0
 
   def add(self, frame, alert_type, enabled=True, extra_text_1='', extra_text_2=''):
@@ -25,12 +27,21 @@ class AlertManager():
     added_alert.alert_text_1 += extra_text_1
     added_alert.alert_text_2 += extra_text_2
     added_alert.start_time = frame * DT_CTRL
+    print(" ===[alert]> alert_type : ",alert_type)
+    print(" ===[alert]> added_alert : ", added_alert)
+    print(" ===[alert]> added_alert.alert_text_1 : ", added_alert.alert_text_1)
+    print(" ===[alert]> added_alert.alert_text_2 : ", added_alert.alert_text_2)
+    print(" ===[alert]> added_alert.start_time : ", added_alert.start_time)
+    print("--3--")
+
+    # if  alert_type != "seatbeltNotLatchedNoEntry" and alert_type != "commIssueNoEntry":  # 2020.7.5 HKH 강제로 경고 제외
 
     # if new alert is higher priority, log it
     if not self.alertPresent() or added_alert.alert_priority > self.activealerts[0].alert_priority:
-          cloudlog.event('alert_add', alert_type=alert_type, enabled=enabled)
+        cloudlog.event('alert_add', alert_type=alert_type, enabled=enabled)
 
     self.activealerts.append(added_alert)
+    print("--4--")
 
     # sort by priority first and then by start_time
     self.activealerts.sort(key=lambda k: (k.alert_priority, k.start_time), reverse=True)
@@ -43,6 +54,7 @@ class AlertManager():
                          max(a.duration_sound, a.duration_hud_alert, a.duration_text) > cur_time]
 
     current_alert = self.activealerts[0] if self.alertPresent() else None
+    print("--5--")
 
     # start with assuming no alerts
     self.alert_type = ""
@@ -62,6 +74,7 @@ class AlertManager():
 
       if current_alert.start_time + current_alert.duration_hud_alert > cur_time:
         self.visual_alert = current_alert.visual_alert
+      print("--6--")
 
       if current_alert.start_time + current_alert.duration_text > cur_time:
         self.alert_text_1 = current_alert.alert_text_1

@@ -483,6 +483,7 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
   # wait for health and CAN packets
   hw_type = messaging.recv_one(sm.sock['health']).health.hwType
   has_relay = hw_type in [HwType.blackPanda, HwType.uno]
+  # print(" ============================> controlsd START....")
   print("Waiting for CAN messages...")
   messaging.get_one_can(can_sock)
 
@@ -491,31 +492,51 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
   car_recognized = CP.carName != 'mock'
   # If stock camera is disconnected, we loaded car controls and it's not chffrplus
 
-  print("===> CP.enableCamera : ", CP.enableCamera)
-  print("===> CI.CC : ", CI.CC)
+  # print(" ===[Conrolsd]> CP.enableCamera              : ", CP.enableCamera)
+  # print(" ===[Conrolsd]> CI.CC                        : ", CI.CC)
 
   controller_available = CP.enableCamera and CI.CC is not None and not passive
-  print("===> controller_available : ", controller_available)
-  print("===> CP.communityFeature : ", CP.communityFeature)
-  print("===> community_feature_toggle : ", community_feature_toggle)
+  # print(" ===[Conrolsd]> controller_available         : ", controller_available)
+  # print(" ===[Conrolsd]> CP.communityFeature          : ", CP.communityFeature)
+  # print(" ===[Conrolsd]> community_feature_toggle     : ", community_feature_toggle)
 
   community_feature_disallowed = CP.communityFeature and not community_feature_toggle
+
+  # print(" ===[Conrolsd]> community_feature_disallowed : ", community_feature_disallowed)
+
+  # print(" ===[Conrolsd]> car_recognized               : ", car_recognized)
+  # print(" ===[Conrolsd]> controller_available         : ", controller_available)
+  # print(" ===[Conrolsd]> CP.dashcamOnly               : ", CP.dashcamOnly)
+  
 
   read_only = not car_recognized or not controller_available or CP.dashcamOnly or community_feature_disallowed
   if read_only:
     CP.safetyModel = car.CarParams.SafetyModel.noOutput
 
+  print(" ===[Conrolsd]> read_only                    : ", read_only)
+
+
   # Write CarParams for radard and boardd safety mode
-  cp_bytes = CP.to_bytes()
+  cp_bytes = CP.to_bytes() 
   params.put("CarParams", cp_bytes)
   params.put("CarParamsCache", cp_bytes)
   params.put("LongitudinalControl", "1" if CP.openpilotLongitudinalControl else "0")
 
   CC = car.CarControl.new_message()
+  print(" ===[Conrolsd]> CC                   :", CC)
   AM = AlertManager()
+  print(" ===[Conrolsd]> AM                   :", car_recognized)
+
+  print(" ===[Conrolsd]> car_recognized       :", car_recognized)
+  print(" ===[Conrolsd]> controller_available :", controller_available)
 
   startup_alert = get_startup_alert(car_recognized, controller_available)
+  print(" ===[Conrolsd]> startup_alert        :", startup_alert)
+  print(" ===[Conrolsd]> sm.frame             :", sm.frame) 
+
   AM.add(sm.frame, startup_alert, False)
+  print(" ===[Conrolsd]> AM.add               :", AM.add)
+
 
   LoC = LongControl(CP, CI.compute_gb)
   VM = VehicleModel(CP)
@@ -575,6 +596,9 @@ def controlsd_thread(sm=None, pm=None, can_sock=None):
 
     prof.checkpoint("Sample")
 
+    # print(" ===[Conrolsd]> hyundai_lkas                 : ", hyundai_lkas)
+    # print(" ===[Conrolsd]> hyundai_timer1               : ", hyundai_timer1)
+    # print(" ===[Conrolsd]> hyundai_timer2               : ", hyundai_timer2)
 
 
     # Create alerts

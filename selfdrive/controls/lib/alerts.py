@@ -609,8 +609,10 @@ ALERTS = [
       "seatbeltNotLatchedNoEntry",
       "오픈파일럿 사용 불가",
       "안전벨트를 체결 하세요",
+      # AlertStatus.normal, AlertSize.mid,
+      # Priority.LOW, VisualAlert.none, AudibleAlert.chimeSeatBelt, 4., 2., 3.),
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.chimeSeatBelt, 4., 2., 3.),
+      Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
 
   Alert(
       "espDisabledNoEntry",
@@ -714,9 +716,10 @@ ALERTS = [
       "commIssueNoEntry",
       "오픈파일럿 사용 불가",
       "프로세스 간 통신 오류가 있습니다",
+      # AlertStatus.normal, AlertSize.mid,
+      # Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
       AlertStatus.normal, AlertSize.mid,
-      Priority.LOW, VisualAlert.none, AudibleAlert.chimeDisengage, .4, 2., 3.),
-
+      Priority.LOW_LOWEST, VisualAlert.none, AudibleAlert.none, 0., 0., 15.),
   Alert(
       "radarCommIssueNoEntry",
       "오픈파일럿 사용 불가",
